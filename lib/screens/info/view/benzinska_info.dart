@@ -8,6 +8,7 @@ import 'package:benzinske_postaje/screens/info/controller/chart_controller.dart'
 import 'package:benzinske_postaje/screens/info/controller/ichart_controller.dart';
 import 'package:benzinske_postaje/screens/info/view/ibenzinska_info.dart';
 import 'package:benzinske_postaje/util/hex_color.dart';
+import 'package:benzinske_postaje/util/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -28,8 +29,8 @@ class BenzinskaInfo extends StatefulWidget {
 
 class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzinskaInfo{
 
-
   List<WebCijenik> cijenik = [];
+  List<WebCijenik> filtriraniCijenik = [];
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
         title: Text(widget.postaja.naziv!, style: Theme.of(context).primaryTextTheme.headline6),
         systemOverlayStyle: Theme.of(context).appBarTheme.systemOverlayStyle!.copyWith(
           statusBarColor: Theme.of(context).scaffoldBackgroundColor
-        )
+          )
         ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -125,7 +126,6 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                         )
                       ],
                     ),
-
                   ],
                 ),
                   buildFuelPrices(context),
@@ -160,8 +160,8 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                       )
                     ],
                   ),
-                  if(cijenik.length > 0)
-                    new LinearChartWidget(cijenik, widget.goriva)
+                  if(filtriraniCijenik.length > 0)
+                    LinearChartWidget(filtriraniCijenik, widget.goriva)
                 ],
               ),
             ),
@@ -414,22 +414,40 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
   Widget buildImage() {
     if(widget.postaja.img!.contains("http")) {
-      return Image.network(
-          widget.postaja.img!,
-          width: 150,
-          fit: BoxFit.contain);
+      return Hero(
+        tag: widget.postaja.id!,
+        child: Image.network(
+            widget.postaja.img!,
+            width: 150,
+            fit: BoxFit.contain),
+      );
     } else {
-      return Image.asset(
-          widget.postaja.img!,
-          width: 150,
-          fit: BoxFit.contain);
+      return Hero(
+        tag: widget.postaja.id!,
+        child: Image.asset(
+            widget.postaja.img!,
+            width: 150,
+            fit: BoxFit.contain),
+      );
     }
+  }
+
+  void filterCijenik(int days) {
+
+    this.cijenik.forEach((cijena) {
+      int dayDiff = Util.daysBetween(DateTime.parse(cijena.datPoc!), DateTime.now());
+      print(dayDiff);
+      if(dayDiff <= days) {
+        this.filtriraniCijenik.add(cijena);
+      }
+    });
   }
 
   @override
   void onSuccessGraphFetch(List<WebCijenik> webCijenik) {
-    setState(() {
-      this.cijenik = webCijenik;
-    });
+
+    this.cijenik = webCijenik;
+    filterCijenik(180);
+    setState(() {});
   }
 }

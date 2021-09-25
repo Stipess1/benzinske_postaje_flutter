@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:benzinske_postaje/model/usluga.dart';
 import 'package:benzinske_postaje/model/cijenik.dart';
 import 'package:benzinske_postaje/model/gorivo.dart';
@@ -5,9 +7,10 @@ import 'package:benzinske_postaje/model/postaja.dart';
 import 'package:benzinske_postaje/model/radno_vrijeme.dart';
 import 'package:benzinske_postaje/screens/home/controller/igas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/view/IHome.dart';
+import 'package:benzinske_postaje/util/api.dart';
+import 'package:benzinske_postaje/util/util.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/date_symbol_data_local.dart';
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
@@ -48,7 +51,7 @@ class GasStationsController implements IGasStationsController{
       time = time.substring(1);
       time = DateTime.parse(time.substring(0, time.length - 1));
 
-      diffDays = daysBetween(today, time);
+      diffDays = Util.daysBetween(today, time);
     }
 
     if(diffDays >= 1 || time == null) {
@@ -57,7 +60,9 @@ class GasStationsController implements IGasStationsController{
       var url = Uri.parse("https://benzinske-postaje.herokuapp.com");
       var response;
       try {
-        response = await http.get(url);
+        response = await http.get(url, headers: {
+          HttpHeaders.authorizationHeader: Api.key,
+        });
       }catch(e) {
         iHome.onFailureFetch("Greska kod servera");
         return;
@@ -239,12 +244,6 @@ class GasStationsController implements IGasStationsController{
           break;
         }
       }
-  }
-
-  int daysBetween(DateTime from, DateTime to) {
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
-    return (to.difference(from).inHours / 24).round();
   }
 
   String parseTime(String benga, Postaja postaja, RadnoVrijeme radnoVrijeme) {

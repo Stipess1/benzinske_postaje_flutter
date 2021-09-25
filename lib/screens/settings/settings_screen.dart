@@ -37,9 +37,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     print("Thema: " + Theme.of(context).scaffoldBackgroundColor.toString());
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: Theme.of(context).appBarTheme.systemOverlayStyle!.copyWith(
-          statusBarColor: Theme.of(context).scaffoldBackgroundColor
-        ),
+        value: Theme.of(context).appBarTheme.systemOverlayStyle!,
+        sized: false,
         child: SafeArea(
             child: Container(
               child: Padding(
@@ -73,6 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           box.write("themeMode", "light");
                           provider.setLightMode();
                         }
+                        setState(() {});
                       },
                     )
                   ],

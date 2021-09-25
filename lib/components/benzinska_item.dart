@@ -17,15 +17,22 @@ class BenzinskaItem extends StatelessWidget {
 
   Widget buildImage() {
     if(postaja.img!.contains("http")) {
-      return Image.network(
-          postaja.img!,
-          width: 50,
-          fit: BoxFit.contain);
+      return Hero(
+        tag: postaja.id!,
+        child: Image.network(
+            postaja.img!,
+            width: 50,
+            fit: BoxFit.contain),
+      );
     } else {
-      return Image.asset(
-          postaja.img!,
-          width: 50,
-          fit: BoxFit.contain);
+
+      return Hero(
+        tag: postaja.id!,
+        child: Image.asset(
+            postaja.img!,
+            width: 50,
+            fit: BoxFit.contain),
+      );
     }
   }
 

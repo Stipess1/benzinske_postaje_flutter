@@ -15,7 +15,10 @@ class ThemeNotifier with ChangeNotifier {
     fontFamily: 'VarelaRound',
     cardColor: HexColor.fromHex("253649"),
     appBarTheme: AppBarTheme(
-      systemOverlayStyle: SystemUiOverlayStyle.light
+      systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light
+      )
     ),
     backgroundColor: HexColor.fromHex("1c2836"),
       textTheme: TextTheme(bodyText1: TextStyle(color: HexColor.fromHex("c0ccda")),
@@ -31,7 +34,10 @@ class ThemeNotifier with ChangeNotifier {
       color: Colors.black
     ),
     appBarTheme: AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle.dark
+        systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark
+        ),
     ),
     primaryTextTheme: TextTheme(
       headline6: TextStyle(

@@ -11,10 +11,6 @@ class LinearChartWidget extends StatefulWidget {
   List<WebCijenik>? webCijenik;
   List<Gorivo>? goriva;
 
-  //
-
-
-
   LinearChartWidget(List<WebCijenik>? webCijenik, List<Gorivo> goriva) {
     this.webCijenik = webCijenik;
     this.goriva = goriva;
@@ -67,17 +63,12 @@ class _LinearChartScreenState extends State<LinearChartWidget> {
         lpg!.add(cijenik);
       }
 
-      print(cijenik.naziv! + " " + cijenik.vrstaGorivaId!.toString());
     });
 
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // var flSpots = widget.webCijenik!.map((e) => FlSpot(
-    //   DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
-    // )).toList();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4, top: 8, right: 10),

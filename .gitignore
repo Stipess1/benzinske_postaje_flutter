@@ -9,6 +9,7 @@
 .history
 .svn/
 /lib/util/api.dart
+*.json
 
 # IntelliJ related
 *.iml

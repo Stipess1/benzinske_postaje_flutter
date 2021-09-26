@@ -8,7 +8,7 @@
 .buildlog/
 .history
 .svn/
-/lib/util/api.dart
+lib/util/api.dart
 *.json
 
 # IntelliJ related

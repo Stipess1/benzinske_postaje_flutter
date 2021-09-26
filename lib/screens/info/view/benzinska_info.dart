@@ -436,7 +436,6 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
     this.cijenik.forEach((cijena) {
       int dayDiff = Util.daysBetween(DateTime.parse(cijena.datPoc!), DateTime.now());
-      print(dayDiff);
       if(dayDiff <= days) {
         this.filtriraniCijenik.add(cijena);
       }

@@ -14,4 +14,9 @@ class RadnoVrijeme {
   Map<String, dynamic> toJson() => _$RadnoVrijemeToJson(this);
 
   RadnoVrijeme();
+
+  @override
+  String toString() {
+    return 'RadnoVrijeme{ponPet: $ponPet, sub: $sub, ned: $ned, praznik: $praznik}';
+  }
 }

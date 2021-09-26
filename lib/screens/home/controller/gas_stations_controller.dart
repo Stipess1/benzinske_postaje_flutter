@@ -51,9 +51,9 @@ class GasStationsController implements IGasStationsController{
       time = time.substring(1);
       time = DateTime.parse(time.substring(0, time.length - 1));
 
-      diffDays = Util.daysBetween(today, time);
+      diffDays = Util.daysBetween(time, today);
     }
-
+    diffDays = 2;
     if(diffDays >= 1 || time == null) {
       box.write('time', jsonEncode(today, toEncodable: myEncode));
       print("API FETCH");
@@ -131,13 +131,13 @@ class GasStationsController implements IGasStationsController{
             var vrijeme = web['radnaVremena'][j];
 
             if(vrijeme['vrsta_dana_id'] == 1) {
-              radnoVrijeme.ponPet = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, radnoVrijeme);
+              radnoVrijeme.ponPet = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, RadnoVrijeme());
             } else if(vrijeme['vrsta_dana_id'] == 2) {
-              radnoVrijeme.sub = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, radnoVrijeme);
+              radnoVrijeme.sub = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, RadnoVrijeme());
             } else if(vrijeme['vrsta_dana_id'] == 3) {
-              radnoVrijeme.ned = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, radnoVrijeme);
+              radnoVrijeme.ned = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, RadnoVrijeme());
             } else if(vrijeme['vrsta_dana_id'] == 4) {
-              radnoVrijeme.praznik = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, radnoVrijeme);
+              radnoVrijeme.praznik = parseTime(vrijeme['pocetak'] + '-' + vrijeme['kraj'], postaja, RadnoVrijeme());
             }
           }
 
@@ -250,11 +250,10 @@ class GasStationsController implements IGasStationsController{
 
     var vrijeme = benga;
     var date = new DateTime.now();
-
     if(radnoVrijeme.ponPet!.isNotEmpty) {
       if(date.weekday >= 1 && date.weekday <= 5) {
         return radnoVrijeme.ponPet!;
-      } else if(date.weekday == 0) {
+      } else if(date.weekday == 7) {
         return radnoVrijeme.ned!;
       } else if(date.weekday == 6) {
         return radnoVrijeme.sub!;

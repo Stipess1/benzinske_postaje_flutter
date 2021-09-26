@@ -126,8 +126,6 @@ class _NavBarState extends State<NavBar>{
           final color = isActive ? HexColor.fromHex("3880ff") : Colors.grey;
           final fontWeight = isActive ? FontWeight.bold : FontWeight.normal;
 
-
-
           return Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

@@ -31,7 +31,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
   List<WebCijenik> cijenik = [];
   List<WebCijenik> filtriraniCijenik = [];
-
+  List<bool> isSelected = [true, false, false, false];
   @override
   void initState() {
     super.initState();
@@ -56,13 +56,13 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
           statusBarColor: Theme.of(context).scaffoldBackgroundColor
           )
         ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          child: SafeArea(
-            child: Center(
-              child: ListView(
-                children: [Column(
+      body: Container(
+        child: SafeArea(
+          child: Center(
+            child: ListView(
+              children: [Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
                   children: [
                     Text(widget.postaja.naziv!, textAlign: TextAlign.center, style: TextStyle(
                       fontSize: 22
@@ -128,46 +128,85 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                     ),
                   ],
                 ),
-                  buildFuelPrices(context),
-                  Divider(
-                    height: 1,
-                    color: Theme.of(context).dividerColor,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Usluge", style: TextStyle(
-                            fontSize: 22
-                        ), textAlign: TextAlign.start,),
-                      )
-                    ],
-                  ),
-                  buildOptions(),
-                  Divider(
-                    height: 1,
-                    color: Theme.of(context).dividerColor,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Grafikon Cijena", style: TextStyle(
-                            fontSize: 22
-                        ), textAlign: TextAlign.start,),
-                      )
-                    ],
-                  ),
-                  if(filtriraniCijenik.length > 0)
-                    LinearChartWidget(filtriraniCijenik, widget.goriva)
-                ],
               ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildFuelPrices(context),
+                      Divider(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Usluge", style: TextStyle(
+                                fontSize: 22
+                            ), textAlign: TextAlign.start,),
+                          )
+                        ],
+                      ),
+                      buildOptions(),
+                      Divider(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Grafikon Cijena", style: TextStyle(
+                                fontSize: 22
+                            ), textAlign: TextAlign.start,),
+                          )
+                        ],
+                      ),
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        borderRadius: BorderRadius.circular(15),
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        selectedColor: Theme.of(context).textTheme.bodyText2!.color,
+                        children: [
+                          Text("3mj."),
+                          Text("6mj."),
+                          Text("1god."),
+                          Text("sve")
+                        ],
+                        onPressed: (int index) {
+                          // isSelected[index] = !isSelected[index];
+
+                          if(index == 0) {
+                            filterCijenik(90);
+                          } else if(index == 1) {
+                            filterCijenik(180);
+                          } else if(index == 2) {
+                            filterCijenik(354);
+                          } else {
+                            filterCijenik(-1);
+                          }
+                          setState(() {
+                            for (int i = 0; i < isSelected.length; i++) {
+                              isSelected[i] = i == index;
+                            }
+                          });
+                        },
+                      ),
+                      if(filtriraniCijenik.length > 0)
+                        LinearChartWidget(filtriraniCijenik, widget.goriva)
+                    ],
+                  ),
+                ),
+
+              ],
             ),
-          )
-    ),
-      )
+          ),
+        )
+    )
     );
   }
 
@@ -201,7 +240,6 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
     for(int i = 0; i < widget.postaja.cijenici.length; i++) {
       var gorivo = widget.postaja.cijenici[i];
-
 
       prices.add(Column(
         children: [
@@ -434,19 +472,26 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
   void filterCijenik(int days) {
 
+    this.filtriraniCijenik.clear();
+    print("days " + days.toString());
     this.cijenik.forEach((cijena) {
-      int dayDiff = Util.daysBetween(DateTime.parse(cijena.datPoc!), DateTime.now());
-      if(dayDiff <= days) {
+      if(days != -1) {
+        int dayDiff = Util.daysBetween(DateTime.parse(cijena.datPoc!), DateTime.now());
+        if(dayDiff <= days) {
+          this.filtriraniCijenik.add(cijena);
+        }
+      } else {
         this.filtriraniCijenik.add(cijena);
       }
     });
+    print(this.filtriraniCijenik.length);
   }
 
   @override
   void onSuccessGraphFetch(List<WebCijenik> webCijenik) {
 
     this.cijenik = webCijenik;
-    filterCijenik(180);
+    filterCijenik(90);
     setState(() {});
   }
 }

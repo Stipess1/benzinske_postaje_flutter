@@ -159,6 +159,12 @@ class GasStationsController implements IGasStationsController{
             postaja.img = "https://www.konzum.hr/assets/1i0/frontend/facebook/facebook_meta_image-5b88c5da1a557eaf6501d1fb63f883285f9346300d9b2e0a196dc32047a9542a.png";
           } else if(postaja.obveznik!.contains("AGS")) {
             postaja.img = "assets/images/ags.png";
+          } else if(postaja.obveznik!.contains("Coral")) {
+            postaja.img = "assets/images/shell.png";
+          } else if(postaja.obveznik!.contains("INA")) {
+            postaja.img = "assets/images/ina.png";
+          } else if(postaja.obveznik!.contains("Crodux")) {
+            postaja.img = "assets/images/crodux.png";
           }
 
           list.add(postaja);

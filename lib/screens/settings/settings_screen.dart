@@ -72,7 +72,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           box.write("themeMode", "light");
                           provider.setLightMode();
                         }
-                        setState(() {});
                       },
                     )
                   ],

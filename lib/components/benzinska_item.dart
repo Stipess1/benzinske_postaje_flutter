@@ -71,8 +71,8 @@ class BenzinskaItem extends StatelessWidget {
               boxShadow: [BoxShadow(
                   color: Colors.black.withOpacity(0.15),
                   spreadRadius: 1,
-                  blurRadius: 8,
-                  offset: Offset(0, 10)
+                  blurRadius: 14,
+                  offset: Offset(0, 8)
               )]
           ),
           child: Material(

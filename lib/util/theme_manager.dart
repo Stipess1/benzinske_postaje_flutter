@@ -44,11 +44,10 @@ class ThemeNotifier with ChangeNotifier {
         color: Colors.black
       )
     ),
+    dividerColor: Colors.grey,
     backgroundColor: const Color(0xFFF5F5F5),
     textTheme: TextTheme(bodyText1: TextStyle(color: Color(0xFF4B4B4B), ),
       bodyText2: TextStyle(color: Colors.black)), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xFF4B4B4B)),
-
-    dividerColor: Colors.white12
   );
 
   ThemeData? _themeData;

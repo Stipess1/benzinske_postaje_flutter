@@ -53,7 +53,7 @@ class GasStationsController implements IGasStationsController{
 
       diffDays = Util.daysBetween(time, today);
     }
-    diffDays = 2;
+    // diffDays = 2;
     if(diffDays >= 1 || time == null) {
       box.write('time', jsonEncode(today, toEncodable: myEncode));
       print("API FETCH");

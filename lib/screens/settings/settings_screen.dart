@@ -28,13 +28,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     box = GetStorage();
+    var themeMode = box.read('themeMode');
 
+    if(themeMode == "dark") {
+      list[0] = true;
+    } else {
+      list[1] = true;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Thema: " + Theme.of(context).scaffoldBackgroundColor.toString());
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: Theme.of(context).appBarTheme.systemOverlayStyle!,
@@ -44,26 +49,79 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget> [
                     Text("U vezi", style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold
                       ),
                     ),
-                    Text("Verzija", style: TextStyle(
-                        fontWeight: FontWeight.bold
+                    ListTile(
+                      title: Text("Verzija", style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color
+                        ),
+                      ),
+                      subtitle: Text("1.9", style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText2!.color
+                        )
                       ),
                     ),
-                    Text("1.9"),
+                    ListTile(
+                      title: Text("Email", style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color
+                        ),
+                      ),
+                      subtitle: Text("stjepstjepanovic@gmail.com", style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText2!.color
+                        )
+                      ),
+                    ),
                     ToggleButtons(
                       isSelected: list,
+                      color: Theme.of(context).textTheme.bodyText2!.color,
+                      borderRadius: BorderRadius.circular(15),
+                      selectedBorderColor: Theme.of(context).dividerColor,
                       children: <Widget>[
-                          Icon(Feather.moon),
-                          Icon(Feather.sun)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                      child: Icon(Feather.moon),
+                                      alignment: PlaceholderAlignment.middle
+                                  ),
+                                  TextSpan(
+                                    text: " Tamni način",
+                                    style: TextStyle(
+                                        color: Theme.of(context).textTheme.bodyText2!.color
+                                    )
+                                  )
+                                ]
+                              ),
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                      child: Icon(Feather.sun),
+                                      alignment: PlaceholderAlignment.middle
+                                  ),
+                                  TextSpan(
+                                      text: " Svijetli način",
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.bodyText2!.color
+                                      )
+                                  )
+                                ]
+                            ),
+                          ),
+                        )
                       ],
                       onPressed: (int index) {
-                        list[index] = !list[index];
-
                         final provider = Provider.of<ThemeNotifier>(context, listen: false);
                         if(index == 0) {
                           box.write("themeMode", "dark");
@@ -72,6 +130,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           box.write("themeMode", "light");
                           provider.setLightMode();
                         }
+                        setState(() {
+                          for (int i = 0; i < list.length; i++) {
+                            list[i] = i == index;
+                          }
+                        });
                       },
                     )
                   ],

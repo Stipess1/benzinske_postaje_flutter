@@ -64,10 +64,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Text(widget.postaja.naziv!, textAlign: TextAlign.center, style: TextStyle(
-                      fontSize: 22
-                      ),
-                    ),
+                    buildImage(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text("Radno Vrijeme: " + widget.postaja.trenutnoRadnoVrijeme!, textAlign: TextAlign.center,),
@@ -77,7 +74,10 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                       child: buildStatus(),
                     ),
                     Text(widget.postaja.obveznik!, textAlign: TextAlign.center,),
-                    buildImage(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(widget.postaja.naziv!, textAlign: TextAlign.center),
+                    ),
                     Center(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

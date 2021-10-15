@@ -32,4 +32,8 @@ class Postaja {
   //
   Postaja();
 
+  @override
+  String toString() {
+    return 'Postaja{adresa: $adresa, cijenici: $cijenici, opcije: $opcije, id: $id, lat: $lat, lon: $lon, mjesto: $mjesto, naziv: $naziv, obveznikId: $obveznikId, obveznik: $obveznik, otvoreno: $otvoreno, img: $img, trenutnoRadnoVrijeme: $trenutnoRadnoVrijeme, radnaVremena: $radnaVremena, udaljenost: $udaljenost, gorivo: $gorivo}';
+  }
 }

@@ -16,4 +16,9 @@ class Cijenik {
   Map<String, dynamic> toJson() => _$CijenikToJson(this);
 
   Cijenik();
+
+  @override
+  String toString() {
+    return 'Cijenik{id: $id, gorivoId: $gorivoId, cijena: $cijena, naziv: $naziv, vrstaGorivoId: $vrstaGorivoId}';
+  }
 }

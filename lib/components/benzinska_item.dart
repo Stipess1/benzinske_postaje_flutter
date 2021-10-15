@@ -47,9 +47,11 @@ class BenzinskaItem extends StatelessWidget {
         padding: const EdgeInsets.only(top: 5, right: 10, bottom: 5, left: 10),
         child: Text(status,
           overflow: TextOverflow.ellipsis,
+          softWrap: false,
           style: TextStyle(
               color: text,
               fontWeight: FontWeight.w600
+
           ),
         ),
       ),
@@ -170,12 +172,16 @@ class BenzinskaItem extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(postaja.gorivo!, style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: "VarelaRound"
+                                  AnimatedSwitcher(
+                                    duration: Duration(seconds: 1),
+                                    transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+                                    child: Text(postaja.gorivo!, style: TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "VarelaRound"
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                   Text("kn/L", style: TextStyle(
                                       fontSize: 15,

@@ -1,13 +1,17 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:animations/animations.dart';
 import 'package:benzinske_postaje/components/fab.dart';
+import 'package:benzinske_postaje/components/ifab.dart';
 import 'package:benzinske_postaje/screens/map/map_screen.dart';
 import 'package:benzinske_postaje/screens/settings/settings_screen.dart';
 import 'package:benzinske_postaje/util/hex_color.dart';
 import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:benzinske_postaje/util/theme_manager.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
@@ -22,7 +26,7 @@ class NavBar extends StatefulWidget {
   _NavBarState createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar>{
+class _NavBarState extends State<NavBar> implements IFab{
 
   HomeScreen homeScreen = HomeScreen();
   MapScreen mapScreen = MapScreen();
@@ -34,6 +38,20 @@ class _NavBarState extends State<NavBar>{
   List<Widget>? pages;
   int page = 0;
   bool? isDark;
+  String fuel = "Eurodizel";
+  String radius = "5 km";
+  String filtriraj = "";
+
+  List<FontWeight> styles = [
+    FontWeight.normal,
+    FontWeight.bold,
+    FontWeight.normal,
+    FontWeight.normal,
+    FontWeight.normal,
+    FontWeight.normal,
+    FontWeight.normal,
+    FontWeight.normal,
+  ];
 
   // Navbar postavke
   NotchSmoothness? notchSmoothness;
@@ -59,7 +77,6 @@ class _NavBarState extends State<NavBar>{
     notchSmoothness = NotchSmoothness.smoothEdge;
     gapLocation = GapLocation.end;
     floatingActionButtonLocation = FloatingActionButtonLocation.endDocked;
-
 
     pages = [
       homeScreen,
@@ -92,7 +109,7 @@ class _NavBarState extends State<NavBar>{
       bottomNavigationBar: _buildNavBar(),
       floatingActionButton: rightCornerRadius!=0 ? SizedBox.shrink(): FloatingActionButton(onPressed: () {  },
         // label: Fab(),
-        child: Fab(),
+        child: Fab(this, fuel, styles, radius, filtriraj),
       ),
       floatingActionButtonLocation: floatingActionButtonLocation,
       body: PageTransitionSwitcher(
@@ -137,8 +154,8 @@ class _NavBarState extends State<NavBar>{
                 child: Text(
                   labels[index],
                   style: TextStyle(
-                      color: color,
-                      fontWeight: fontWeight
+                    color: color,
+                    fontWeight: fontWeight
                   ),
                 ),
               )
@@ -176,4 +193,31 @@ class _NavBarState extends State<NavBar>{
 
   }
 
+  @override
+  void setFuel(int code, String name, int index) {
+    homeScreen.state.changeFuelPrice(code, name);
+    this.fuel = name;
+    for(var i = 0; i < styles.length; i++) {
+      styles[i] = FontWeight.normal;
+    }
+    styles[index] = FontWeight.bold;
+
+    setState(() {});
+  }
+
+  @override
+  void setRadius(String name, int index) {
+    homeScreen.state.changeRadius(name);
+    this.radius = name;
+
+    setState(() {});
+  }
+
+  @override
+  void sortFuel(String name, int index, int sort) {
+    homeScreen.state.sortFuel(name, sort);
+    this.filtriraj = name;
+
+    setState(() {});
+  }
 }

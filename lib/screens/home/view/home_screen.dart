@@ -13,8 +13,10 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'IHome.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -62,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     widget.state = this;
+    checkForInfoAlert();
     _mainWidget = Center(
       key: Key("1"),
       child: Column(
@@ -80,34 +83,55 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   Widget buildListWidget() {
-    return ListView(
-      key: Key("2"),
-      children: <Widget> [
-        Padding(
-          padding: EdgeInsets.all(8),
-          child: Text(
-            "Benzinske u blizini (" +
-                listaSize.toString() +
-                ")",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: "VarelaRound",
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+    if(filtriranePostaje.length > 0) {
+      return ListView(
+        key: Key("2"),
+        children: <Widget> [
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              "Benzinske u blizini (" +
+                  listaSize.toString() +
+                  ")",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "VarelaRound",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
           ),
+          ListView.builder(
+              key: listKey,
+              physics: ScrollPhysics(),
+              itemCount: filtriranePostaje.length,
+              padding: const EdgeInsets.only(bottom: 15),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return BenzinskaItem(postaja: filtriranePostaje[index], goriva: this.goriva);
+              }),
+        ],
+      );
+    } else {
+      return Center(
+        key: Key("1"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 256,
+              width: 256,
+              child: SvgPicture.asset('assets/images/empty.svg'),
+            )
+            ,
+            Padding(padding: EdgeInsets.all(15),
+            child: Text("Ne postoje benzinske s postavljenim filterima."),)
+          ],
         ),
-        ListView.builder(
-            key: listKey,
-            physics: ScrollPhysics(),
-            itemCount: filtriranePostaje.length,
-            padding: const EdgeInsets.only(bottom: 15),
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return BenzinskaItem(postaja: filtriranePostaje[index], goriva: this.goriva);
-            }),
-      ],
-    );
+      );
+    }
+
   }
 
   @override
@@ -134,6 +158,33 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ),
       ),
     );
+  }
+
+  Future<void> checkForInfoAlert() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    bool? repeat = prefs.getBool('info');
+    if(repeat == null)
+      repeat = false;
+    if(!repeat) {
+      buildInfoAlertDialog();
+      await prefs.setBool('info', true);
+    }
+  }
+
+  void buildInfoAlertDialog() {
+    showDialog(context: context, builder: (_) {
+      return AlertDialog(
+        backgroundColor: Theme.of(context).backgroundColor,
+        contentTextStyle: Theme.of(context).textTheme.bodyText1,
+        titleTextStyle: Theme.of(context).textTheme.headline5,
+        title: Text("Cijene na postajama"),
+        content: Text('Neke cijene goriva mogu biti netočne, jer se svi podatci o benzinskim postajama uzima s Minstarstva gospodarstva i održivog razvoja Republike Hrvatske.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text("Ok"))
+        ],
+      );
+    });
   }
 
   @override

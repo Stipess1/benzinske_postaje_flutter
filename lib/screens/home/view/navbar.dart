@@ -166,7 +166,9 @@ class _NavBarState extends State<NavBar> implements IFab{
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         gapLocation: gapLocation,
         activeIndex: page,
-        leftCornerRadius: 32,
+        splashSpeedInMilliseconds: 0,
+        splashRadius: 0,
+        leftCornerRadius: 8,
         notchSmoothness: notchSmoothness,
         rightCornerRadius: rightCornerRadius,
         onTap: (index) {
@@ -219,5 +221,10 @@ class _NavBarState extends State<NavBar> implements IFab{
     this.filtriraj = name;
 
     setState(() {});
+  }
+
+  @override
+  void fuelPriceWrong() {
+    homeScreen.state.buildInfoAlertDialog();
   }
 }

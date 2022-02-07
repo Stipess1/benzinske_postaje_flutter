@@ -22,7 +22,7 @@ class ThemeNotifier with ChangeNotifier {
     ),
     backgroundColor: HexColor.fromHex("1c2836"),
       textTheme: TextTheme(bodyText1: TextStyle(color: HexColor.fromHex("c0ccda")),
-          bodyText2: TextStyle(color: HexColor.fromHex("c0ccda"))), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white70),
+          bodyText2: TextStyle(color: HexColor.fromHex("c0ccda")), headline5: TextStyle(color: HexColor.fromHex("c0ccda")), caption: TextStyle(color: HexColor.fromHex("c0ccda"))), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white70),
       dividerColor: HexColor.fromHex("4DFFFFFF")
   );
 

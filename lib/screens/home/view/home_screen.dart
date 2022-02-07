@@ -179,7 +179,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         contentTextStyle: Theme.of(context).textTheme.bodyText1,
         titleTextStyle: Theme.of(context).textTheme.headline5,
         title: Text("Cijene na postajama"),
-        content: Text('Neke cijene goriva mogu biti netočne, jer se svi podatci o benzinskim postajama uzima s Minstarstva gospodarstva i održivog razvoja Republike Hrvatske.'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FittedBox(
+              fit: BoxFit.cover,
+              child: SvgPicture.asset('assets/images/info.svg'),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text('Neke cijene goriva mogu biti netočne, jer se svi podatci o benzinskim postajama uzima s Minstarstva gospodarstva i održivog razvoja Republike Hrvatske.')
+            )
+          ],
+        ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text("Ok"))
         ],
@@ -254,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           if(filtriranePostaje[i].udaljenost! < filtriranePostaje[j].udaljenost!) {
             var temp = filtriranePostaje[i];
             filtriranePostaje[i] = filtriranePostaje[j];
-            filtriranePostaje[i] = temp;
+            filtriranePostaje[j] = temp;
           }
         }
       }

@@ -100,7 +100,6 @@ class Fab extends StatelessWidget {
               ListTile(
                 title: Text('Cijene se ne prikazuju točno?', style: Theme.of(context).textTheme.bodyText2),
                 leading: Icon(Ionicons.alert_circle_outline, color: Theme.of(context).iconTheme.color),
-                trailing: Text(this.filtriraj!, style: Theme.of(context).textTheme.bodyText2),
                 onTap: () => iFab!.fuelPriceWrong(),
               ),
             ],

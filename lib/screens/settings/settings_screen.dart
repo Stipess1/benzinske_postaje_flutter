@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -76,66 +77,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         )
                       ),
                     ),
-                    ToggleButtons(
-                      isSelected: list,
-                      color: Theme.of(context).textTheme.bodyText2!.color,
-                      borderRadius: BorderRadius.circular(15),
-                      selectedBorderColor: Theme.of(context).dividerColor,
-                      children: <Widget>[
+                    ListTile(
+                      title: Text("Tema", style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color
+                        ),
+                      ),
+                      subtitle: ToggleButtons(
+                        isSelected: list,
+                        color: Theme.of(context).textTheme.bodyText2!.color,
+                        borderRadius: BorderRadius.circular(15),
+                        selectedBorderColor: Theme.of(context).dividerColor,
+                        children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RichText(
                               text: TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                      child: Icon(Feather.moon),
-                                      alignment: PlaceholderAlignment.middle
-                                  ),
-                                  TextSpan(
-                                    text: " Tamni način",
-                                    style: TextStyle(
-                                        color: Theme.of(context).textTheme.bodyText2!.color
+                                  children: [
+                                    WidgetSpan(
+                                        child: Icon(Feather.moon),
+                                        alignment: PlaceholderAlignment.middle
+                                    ),
+                                    TextSpan(
+                                        text: " Tamni način",
+                                        style: TextStyle(
+                                            color: Theme.of(context).textTheme.bodyText2!.color
+                                        )
                                     )
-                                  )
-                                ]
+                                  ]
                               ),
                             ),
                           ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RichText(
-                            text: TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                      child: Icon(Feather.sun),
-                                      alignment: PlaceholderAlignment.middle
-                                  ),
-                                  TextSpan(
-                                      text: " Svijetli način",
-                                      style: TextStyle(
-                                        color: Theme.of(context).textTheme.bodyText2!.color
-                                      )
-                                  )
-                                ]
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RichText(
+                              text: TextSpan(
+                                  children: [
+                                    WidgetSpan(
+                                        child: Icon(Feather.sun),
+                                        alignment: PlaceholderAlignment.middle
+                                    ),
+                                    TextSpan(
+                                        text: " Svijetli način",
+                                        style: TextStyle(
+                                            color: Theme.of(context).textTheme.bodyText2!.color
+                                        )
+                                    )
+                                  ]
+                              ),
                             ),
-                          ),
-                        )
-                      ],
-                      onPressed: (int index) {
-                        final provider = Provider.of<ThemeNotifier>(context, listen: false);
-                        if(index == 0) {
-                          box.write("themeMode", "dark");
-                          provider.setDarkMode();
-                        } else {
-                          box.write("themeMode", "light");
-                          provider.setLightMode();
-                        }
-                        setState(() {
-                          for (int i = 0; i < list.length; i++) {
-                            list[i] = i == index;
+                          )
+                        ],
+                        onPressed: (int index) {
+                          final provider = Provider.of<ThemeNotifier>(context, listen: false);
+                          if(index == 0) {
+                            box.write("themeMode", "dark");
+                            provider.setDarkMode();
+                          } else {
+                            box.write("themeMode", "light");
+                            provider.setLightMode();
                           }
-                        });
-                      },
+                          setState(() {
+                            for (int i = 0; i < list.length; i++) {
+                              list[i] = i == index;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () => launch("https://mzoe-gor.hr/"),
+                      title: Text("Podatci o postajama", style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color
+                        ),
+                      ),
+                      subtitle: Text("mzoe-gor.hr", style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText2!.color
+                        )
+                      ),
                     )
                   ],
                 ),

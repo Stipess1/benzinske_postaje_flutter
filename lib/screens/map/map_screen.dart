@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:typed_data';
 
+import 'package:benzinske_postaje/components/benzinska_item.dart';
 import 'package:benzinske_postaje/model/gorivo.dart';
 import 'package:benzinske_postaje/model/postaja.dart';
 import 'package:benzinske_postaje/screens/home/controller/gas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/controller/igas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/view/IHome.dart';
+import 'package:benzinske_postaje/screens/info/view/benzinska_info.dart';
 import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +16,11 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:ui' as ui;
+
+import '../../util/util.dart';
 
 
 class MapScreen extends StatefulWidget {
@@ -159,25 +166,46 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
   @override
   void onFailureFetch(String message) {
     print(message);
   }
 
   @override
-  void onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva) {
+  Future<void> onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva) async {
     for (var i = 0; i < postaje.length; i++){
       var postaja = postaje[i];
       if (postaja.lat != null && postaja.lon != null) {
+
+        postaja.udaljenost = Util.calculateDistance(
+            postaja.lon, postaja.lat, position.latitude, position.longitude);
+
+        postaja.udaljenost = double.parse(postaja.udaljenost!.toStringAsFixed(1));
+        final BitmapDescriptor markerIcon = postaja.otvoreno! ? await BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(48, 48)), "assets/images/otvoreno.png") : await BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(48, 48)), "assets/images/zatvoreno.png");
+
         markers.add(Marker(
           markerId: MarkerId(postaja.id.toString()),
-          infoWindow: InfoWindow(
-            title: postaja.naziv,
-            snippet: postaja.adresa
-          ),
           draggable: false,
+          icon: markerIcon,
           onTap: () {
-
+            showCupertinoModalBottomSheet(
+                context: context,
+                expand: false,
+                builder: (builder) {
+                  return Material(
+                    borderRadius: BorderRadius.only(topLeft: Radius.elliptical(16, 16), topRight: Radius.elliptical(16, 16)),
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: BenzinskaInfo(goriva: goriva, postaja: postaja),
+                  );
+                }
+            );
           },
           position: LatLng(postaja.lon!, postaja.lat!)
         ));

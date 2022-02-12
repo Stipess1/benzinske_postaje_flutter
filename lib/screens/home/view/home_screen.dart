@@ -41,21 +41,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   late BuildContext homeContext;
 
 
-  Future<void> checkPermission() async {
-    if (!await Permission.location.request().isGranted) {
-      var status = await Permission.location.request();
-      if(status == PermissionStatus.granted) {
-        fetchGasStations();
-      } else {
-        print("Nije dopusteno");
-      }
-    } else {
-      position = await Geolocator.getCurrentPosition();
-      fetchGasStations();
-    }
-  }
 
-  void fetchGasStations() {
+  Future<void> fetchGasStations() async {
+    position = await Geolocator.getCurrentPosition();
     IGasStationsController gasStationsController =
         new GasStationsController(this);
     gasStationsController.fetchGasStations();
@@ -76,11 +64,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ],
       ),
     );
-
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      checkPermission();
-    });
-
   }
 
   Widget buildListWidget() {

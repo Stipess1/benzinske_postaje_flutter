@@ -26,6 +26,7 @@ import '../../util/util.dart';
 class MapScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MapScreenState();
+  late _MapScreenState state;
 }
 
 class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixin<MapScreen>, WidgetsBindingObserver implements IHome {
@@ -34,6 +35,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
   String url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> markers = [];
+  late Widget _mainWidget;
 
   GoogleMapController? _mapController;
   bool isMapCreated = false;
@@ -41,12 +43,18 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
 
   @override
   void initState() {
-    checkGpsLocation();
+    widget.state = this;
+    _mainWidget = Center(
+      key: Key("1"),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator()
+        ],
+      ),
+    );
     super.initState();
-
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      checkPermission();
-    });
   }
 
   @override
@@ -58,25 +66,12 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
 
   }
 
-  void fetchGasStations() {
+  Future<void> fetchGasStations() async {
+    position = await Geolocator.getCurrentPosition();
+    await checkGpsLocation();
     IGasStationsController gasStationsController =
     new GasStationsController(this);
     gasStationsController.fetchGasStations();
-  }
-
-  Future<void> checkPermission() async {
-    if (!await Permission.location.request().isGranted) {
-      var status = await Permission.location.request();
-      if(status == PermissionStatus.granted) {
-        fetchGasStations();
-      } else {
-        print("Nije dopusteno");
-      }
-    } else {
-      position = await Geolocator.getCurrentPosition();
-      print("dopusteno");
-      fetchGasStations();
-    }
   }
 
   void checkThemeMode() {
@@ -87,7 +82,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
     } else {
       isDark = true;
     }
-
+    print(box.read("themeMode"));
     if(isDark && isMapCreated) {
       changeMapDark();
     } else if(isMapCreated && !isDark){
@@ -118,6 +113,12 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
   }
 
   @override
+  void dispose() {
+    _mapController!.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
   super.build(context);
 
@@ -127,21 +128,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
     value: Theme.of(context).appBarTheme.systemOverlayStyle!.copyWith(
       statusBarColor: Colors.transparent
     ),
-    child: GoogleMap(
-      mapType: MapType.normal,
-      myLocationButtonEnabled: false,
-      myLocationEnabled: true,
-      compassEnabled: false,
-      mapToolbarEnabled: false,
-      zoomControlsEnabled: false,
-      markers: Set.from(markers),
-
-      initialCameraPosition: CameraPosition(
-        target: pos,
-        zoom: 13
-      ),
-      onMapCreated: _onMapCreated,
-    ),
+    child: _mainWidget
   );
 
   }
@@ -156,11 +143,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
     } else {
       changeMapLight();
     }
-    
-    setState(() {
 
-    });
-    await checkGpsLocation();
     controller.animateCamera(CameraUpdate.newLatLng(pos));
   }
 
@@ -200,6 +183,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
             showCupertinoModalBottomSheet(
                 context: context,
                 expand: false,
+                isDismissible: true,
                 builder: (builder) {
                   return Material(
                     borderRadius: BorderRadius.only(topLeft: Radius.elliptical(16, 16), topRight: Radius.elliptical(16, 16)),
@@ -214,7 +198,22 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
       }
     }
     setState(() {
+      print("Main widget");
+      _mainWidget = GoogleMap(
+        mapType: MapType.normal,
+        myLocationButtonEnabled: false,
+        myLocationEnabled: true,
+        compassEnabled: false,
+        mapToolbarEnabled: false,
+        zoomControlsEnabled: false,
+        markers: Set.from(markers),
 
+        initialCameraPosition: CameraPosition(
+            target: pos,
+            zoom: 13
+        ),
+        onMapCreated: _onMapCreated,
+      );
     });
   }
 

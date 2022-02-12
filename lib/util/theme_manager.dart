@@ -59,7 +59,11 @@ class ThemeNotifier with ChangeNotifier {
   ThemeNotifier() {
     var themeMode = box.read('themeMode');
     print(themeMode);
-    if(themeMode == null) themeMode = "light";
+    if(themeMode == null){
+      themeMode = "light";
+      box.write('themeMode', 'light');
+    }
+
     if(themeMode == "light") {
       this.themeMode = ThemeMode.light;
     } else {

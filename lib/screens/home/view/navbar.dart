@@ -2,6 +2,9 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:animations/animations.dart';
 import 'package:benzinske_postaje/components/fab.dart';
 import 'package:benzinske_postaje/components/ifab.dart';
+import 'package:benzinske_postaje/model/gorivo.dart';
+import 'package:benzinske_postaje/model/postaja.dart';
+import 'package:benzinske_postaje/screens/home/view/IHome.dart';
 import 'package:benzinske_postaje/screens/map/map_screen.dart';
 import 'package:benzinske_postaje/screens/settings/settings_screen.dart';
 import 'package:benzinske_postaje/util/hex_color.dart';
@@ -19,6 +22,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
+import '../controller/gas_stations_controller.dart';
+import '../controller/igas_stations_controller.dart';
 import 'home_screen.dart';
 
 class NavBar extends StatefulWidget {
@@ -26,7 +31,7 @@ class NavBar extends StatefulWidget {
   _NavBarState createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar> implements IFab{
+class _NavBarState extends State<NavBar> implements IFab, IHome{
 
   HomeScreen homeScreen = HomeScreen();
   MapScreen mapScreen = MapScreen();
@@ -84,17 +89,34 @@ class _NavBarState extends State<NavBar> implements IFab{
     ];
 
     _pageController = PreloadPageController(initialPage: page);
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      checkPermission();
+    });
     super.initState();
   }
 
-  Future<void> checkPermissions() async {
+  Future<void> checkPermission() async {
     if (!await Permission.location.request().isGranted) {
-      await Permission.location.request();
+      var status = await Permission.location.request();
+      if(status == PermissionStatus.granted) {
+        position = await Geolocator.getCurrentPosition();
+        fetchGasStations();
+      } else {
+        print("Nije dopusteno");
+      }
     } else {
       position = await Geolocator.getCurrentPosition();
-
+      fetchGasStations();
     }
   }
+
+  void fetchGasStations() {
+    IGasStationsController gasStationsController =
+    new GasStationsController(this);
+    gasStationsController.fetchGasStations();
+  }
+
   @override
   void dispose() {
     _pageController!.dispose();
@@ -225,5 +247,16 @@ class _NavBarState extends State<NavBar> implements IFab{
   @override
   void fuelPriceWrong() {
     homeScreen.state.buildInfoAlertDialog();
+  }
+
+  @override
+  void onFailureFetch(String message) {
+      print(message);
+  }
+
+  @override
+  void onSuccessFetch(List<Postaja> list, List<Gorivo> goriva) {
+    mapScreen.state.fetchGasStations();
+    homeScreen.state.fetchGasStations();
   }
 }

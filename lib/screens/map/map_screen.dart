@@ -131,6 +131,8 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
       mapType: MapType.normal,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
+      compassEnabled: false,
+      mapToolbarEnabled: false,
       zoomControlsEnabled: false,
       markers: Set.from(markers),
 

@@ -15,6 +15,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BenzinskaInfo extends StatefulWidget {
 
@@ -108,7 +109,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                     ),
                     OutlinedButton(
                       onPressed: () {
-                        print("Odvedi");
+                        openMap(widget.postaja.lon!, widget.postaja.lat!);
                       },
                       child: Text("Odvedi me"),
                     ),
@@ -209,6 +210,11 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
         )
     )
     );
+  }
+
+  Future<void> openMap(double latitude, double longitude) async {
+    var googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    await launch(googleUrl.toString());
   }
 
   /*

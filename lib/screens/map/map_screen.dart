@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:benzinske_postaje/model/gorivo.dart';
+import 'package:benzinske_postaje/model/postaja.dart';
+import 'package:benzinske_postaje/screens/home/controller/gas_stations_controller.dart';
+import 'package:benzinske_postaje/screens/home/controller/igas_stations_controller.dart';
+import 'package:benzinske_postaje/screens/home/view/IHome.dart';
 import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 class MapScreen extends StatefulWidget {
@@ -15,11 +21,12 @@ class MapScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixin<MapScreen>, WidgetsBindingObserver {
-
+class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixin<MapScreen>, WidgetsBindingObserver implements IHome {
+  late Position position;
   LatLng pos = LatLng(45.6807694, 16.038212);
   String url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   Completer<GoogleMapController> _controller = Completer();
+  List<Marker> markers = [];
 
   GoogleMapController? _mapController;
   bool isMapCreated = false;
@@ -30,6 +37,9 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
     checkGpsLocation();
     super.initState();
 
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      checkPermission();
+    });
   }
 
   @override
@@ -39,6 +49,27 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
       checkThemeMode();
     }
 
+  }
+
+  void fetchGasStations() {
+    IGasStationsController gasStationsController =
+    new GasStationsController(this);
+    gasStationsController.fetchGasStations();
+  }
+
+  Future<void> checkPermission() async {
+    if (!await Permission.location.request().isGranted) {
+      var status = await Permission.location.request();
+      if(status == PermissionStatus.granted) {
+        fetchGasStations();
+      } else {
+        print("Nije dopusteno");
+      }
+    } else {
+      position = await Geolocator.getCurrentPosition();
+      print("dopusteno");
+      fetchGasStations();
+    }
   }
 
   void checkThemeMode() {
@@ -94,6 +125,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
       zoomControlsEnabled: false,
+      markers: Set.from(markers),
 
       initialCameraPosition: CameraPosition(
         target: pos,
@@ -101,37 +133,6 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
       ),
       onMapCreated: _onMapCreated,
     ),
-    // child: FlutterMap(
-    //   mapController: _mapController,
-    //   options: MapOptions(
-    //       center: pos,
-    //       zoom: 13,
-    //       interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag | InteractiveFlag.doubleTapZoom
-    //   ),
-    //   layers: [
-    //     TileLayerOptions(
-    //       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    //       subdomains: ['a', 'b', 'c'],
-    //       attributionBuilder: (_) {
-    //         return Text("© OpenStreetMap contributors");
-    //       },
-    //     ),
-    //     MarkerLayerOptions(
-    //         markers: [
-    //           Marker(
-    //               width: 80,
-    //               height: 80,
-    //               point: pos,
-    //               builder: (ctx) {
-    //                 return Container(
-    //                   child: FlutterLogo(),
-    //                 );
-    //               }
-    //           )
-    //         ]
-    //     )
-    //   ],
-    // ),
   );
 
   }
@@ -157,5 +158,34 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  @override
+  void onFailureFetch(String message) {
+    print(message);
+  }
+
+  @override
+  void onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva) {
+    for (var i = 0; i < postaje.length; i++){
+      var postaja = postaje[i];
+      if (postaja.lat != null && postaja.lon != null) {
+        markers.add(Marker(
+          markerId: MarkerId(postaja.id.toString()),
+          infoWindow: InfoWindow(
+            title: postaja.naziv,
+            snippet: postaja.adresa
+          ),
+          draggable: false,
+          onTap: () {
+
+          },
+          position: LatLng(postaja.lon!, postaja.lat!)
+        ));
+      }
+    }
+    setState(() {
+
+    });
+  }
 
 }

@@ -32,6 +32,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
   List<WebCijenik> cijenik = [];
   List<WebCijenik> filtriraniCijenik = [];
   List<bool> isSelected = [true, false, false, false];
+  bool disposed = false;
   @override
   void initState() {
     super.initState();
@@ -490,8 +491,15 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
   @override
   void onSuccessGraphFetch(List<WebCijenik> webCijenik) {
 
-    this.cijenik = webCijenik;
-    filterCijenik(90);
-    setState(() {});
+    if(!disposed) {
+      this.cijenik = webCijenik;
+      filterCijenik(90);
+      setState(() {});
+    }
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    disposed = true;
   }
 }

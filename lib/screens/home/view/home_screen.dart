@@ -5,6 +5,7 @@ import 'package:benzinske_postaje/model/gorivo.dart';
 import 'package:benzinske_postaje/model/postaja.dart';
 import 'package:benzinske_postaje/screens/home/controller/igas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/controller/gas_stations_controller.dart';
+import 'package:benzinske_postaje/screens/home/view/navbar.dart';
 import 'package:benzinske_postaje/util/util.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
@@ -144,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         value: Theme.of(context).appBarTheme.systemOverlayStyle!.copyWith(
             statusBarColor: Theme.of(context).scaffoldBackgroundColor
         ),
+
         child: SafeArea(
           bottom: false,
           child: Container(

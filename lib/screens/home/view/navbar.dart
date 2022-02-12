@@ -71,7 +71,6 @@ class _NavBarState extends State<NavBar> implements IFab{
     Ionicons.settings
   ];
 
-
   @override
   void initState() {
     notchSmoothness = NotchSmoothness.smoothEdge;

@@ -208,7 +208,7 @@ class LinearChartWidget extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         );
-                        return LineTooltipItem('$outputFormat \n $naziv ${touchedSpot.y.toStringAsFixed(2)} kn', textStyle);
+                        return LineTooltipItem('$outputFormat \n $naziv \n ${touchedSpot.y.toStringAsFixed(2)} kn', textStyle);
                       }).toList();
                     }
                 ),

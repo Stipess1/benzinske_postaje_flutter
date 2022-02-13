@@ -10,6 +10,8 @@
 .svn/
 lib/util/api.dart
 *.json
+benz.jks
+/android/key.properties
 
 # IntelliJ related
 *.iml

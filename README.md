@@ -1,16 +1,18 @@
-# benzinske_postaje
 
-A new Flutter application.
 
-## Getting Started
+[<img src="assets/screenshots/banner.png" style="max-width: 100%;">](assets/screenshots/banner.png)
+Jednostavna aplikacija napravljena u Flutter-u za prikazivanje benzinskih postaji u Republici Hrvatskoj.
 
-This project is a starting point for a Flutter application.
+## Slike zaslona
 
-A few resources to get you started if this is your first Flutter project:
+[<img src="assets/screenshots/image1.jpeg" width="160" style="max-width: 100%;">](assets/screenshots/image1.jpeg)
+[<img src="assets/screenshots/image2.jpeg" width="160" style="max-width: 100%;">](assets/screenshots/image2.jpeg)
+[<img src="assets/screenshots/image3.jpeg" width="160" style="max-width: 100%;">](assets/screenshots/image3.jpeg)
+[<img src="assets/screenshots/image4.jpeg" width="160" style="max-width: 100%;">](assets/screenshots/image4.jpeg)
+[<img src="assets/screenshots/image5.jpeg" width="160" style="max-width: 100%;">](assets/screenshots/image5.jpeg)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Opis
+Aplikacija koristi [MZOE](https://mzoe-gor.hr/) stranicu za preuzimanje podataka, te aplikacija koristi vašu trenutnu lokaciju da pronađe benzinske postaje u blizini vas. Mogućnost traženja i filtiranje benzinskih postaji po:
+* Udaljenosti
+* Cijeni goriva
+* Vrsta goriva

@@ -3,6 +3,7 @@ import 'package:benzinske_postaje/model/web_cijenik.dart';
 import 'package:benzinske_postaje/util/hex_color.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LinearChartWidget extends StatelessWidget {
 
@@ -149,7 +150,14 @@ class LinearChartWidget extends StatelessWidget {
                     final DateTime date =
                     DateTime.fromMillisecondsSinceEpoch(value.toInt());
                     final parts = date.toIso8601String().split("T");
-                    return parts.first;
+
+                    var dateFormat = DateFormat('yyyy-MM-dd');
+                    var input = dateFormat.parse(parts.first);
+
+                    var output = DateFormat('dd/MM/yyyy');
+                    var outputFormat = output.format(input);
+
+                    return outputFormat;
                   },
 
                   // margin: 12,
@@ -189,13 +197,18 @@ class LinearChartWidget extends StatelessWidget {
                           date = lpg![touchedSpot.spotIndex].datPoc;
                           naziv = lpg![touchedSpot.spotIndex].naziv;
                         }
+                        var dateFormat = DateFormat('yyyy-MM-dd');
+                        var input = dateFormat.parse(date!);
+
+                        var output = DateFormat('dd/MM/yyyy');
+                        var outputFormat = output.format(input);
 
                         final textStyle = TextStyle(
                           color: touchedSpot.bar.colors[0],
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         );
-                        return LineTooltipItem('$date \n $naziv ${touchedSpot.y.toStringAsFixed(2)} kn', textStyle);
+                        return LineTooltipItem('$outputFormat \n $naziv ${touchedSpot.y.toStringAsFixed(2)} kn', textStyle);
                       }).toList();
                     }
                 ),

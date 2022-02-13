@@ -59,13 +59,9 @@ class ThemeNotifier with ChangeNotifier {
     var themeMode = box.read('themeMode');
     var systemTheme = SchedulerBinding.instance!.window.platformBrightness;
     bool isDarkMode = systemTheme == Brightness.dark;
-
     if(themeMode == null && !isDarkMode){
       themeMode = "light";
       box.write('themeMode', 'light');
-    } else {
-      themeMode = "dark";
-      box.write('themeMode', 'dark');
     }
 
     if(themeMode == "light") {

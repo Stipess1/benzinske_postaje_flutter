@@ -1,6 +1,7 @@
 import 'package:benzinske_postaje/util/hex_color.dart';
 import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -50,18 +51,21 @@ class ThemeNotifier with ChangeNotifier {
       bodyText2: TextStyle(color: Colors.black)), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xFF4B4B4B)),
   );
 
-  ThemeData? _themeData;
-
   ThemeMode? themeMode;
 
   final box = GetStorage();
 
   ThemeNotifier() {
     var themeMode = box.read('themeMode');
-    print(themeMode);
-    if(themeMode == null){
+    var systemTheme = SchedulerBinding.instance!.window.platformBrightness;
+    bool isDarkMode = systemTheme == Brightness.dark;
+
+    if(themeMode == null && !isDarkMode){
       themeMode = "light";
       box.write('themeMode', 'light');
+    } else {
+      themeMode = "dark";
+      box.write('themeMode', 'dark');
     }
 
     if(themeMode == "light") {
@@ -73,14 +77,12 @@ class ThemeNotifier with ChangeNotifier {
   }
 
   void setDarkMode() {
-    _themeData = darkTheme;
     themeMode = ThemeMode.dark;
     box.write('themeMode', 'dark');
     notifyListeners();
   }
 
   void setLightMode() {
-    _themeData = lightTheme;
     themeMode = ThemeMode.light;
     box.write('themeMode', 'light');
     notifyListeners();

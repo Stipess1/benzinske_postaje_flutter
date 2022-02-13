@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               transitionBuilder: (child, animation) {
                 return FadeTransition(child: child, opacity: animation);
               },
-              duration: Duration(seconds: 2),
+              duration: Duration(milliseconds: 1500),
               child: _mainWidget,
             )
           ),

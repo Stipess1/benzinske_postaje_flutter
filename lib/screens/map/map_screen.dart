@@ -82,7 +82,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
     } else {
       isDark = true;
     }
-    print(box.read("themeMode"));
+
     if(isDark && isMapCreated) {
       changeMapDark();
     } else if(isMapCreated && !isDark){
@@ -197,23 +197,25 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
         ));
       }
     }
-    setState(() {
-      print("Main widget");
-      _mainWidget = GoogleMap(
-        mapType: MapType.normal,
-        myLocationButtonEnabled: false,
-        myLocationEnabled: true,
-        compassEnabled: false,
-        mapToolbarEnabled: false,
-        zoomControlsEnabled: false,
-        markers: Set.from(markers),
+    // https://github.com/flutter/flutter/issues/28493
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        _mainWidget = GoogleMap(
+          mapType: MapType.normal,
+          myLocationButtonEnabled: false,
+          myLocationEnabled: true,
+          compassEnabled: false,
+          mapToolbarEnabled: false,
+          zoomControlsEnabled: false,
+          markers: Set.from(markers),
 
-        initialCameraPosition: CameraPosition(
-            target: pos,
-            zoom: 13
-        ),
-        onMapCreated: _onMapCreated,
-      );
+          initialCameraPosition: CameraPosition(
+              target: pos,
+              zoom: 13
+          ),
+          onMapCreated: _onMapCreated,
+        );
+      });
     });
   }
 

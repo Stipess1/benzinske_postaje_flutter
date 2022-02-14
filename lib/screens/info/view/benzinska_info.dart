@@ -37,7 +37,6 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
   @override
   void initState() {
     super.initState();
-
     fetchGraph();
   }
 
@@ -152,7 +151,10 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                           )
                         ],
                       ),
-                      buildOptions(),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: buildOptions(context),
+                      ),
                       Divider(
                         height: 1,
                         color: Theme.of(context).dividerColor,
@@ -419,41 +421,44 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
     );
   }
 
-  Widget buildOptions() {
+  Widget buildOptions(BuildContext context) {
     List<Usluga> list = widget.postaja.opcije;
 
     var chips = <Widget> [];
 
     if(list.length == 0) {
       return Padding(
-        padding: const EdgeInsets.only(left: 15.0),
+        padding: const EdgeInsets.only(left: 15.0, bottom: 5.0),
         child: Text("Nema usluga"),
       );
     }
 
     list.forEach((usluga) {
       chips.add(Chip(
-        avatar: CircleAvatar(
-          child: SvgPicture.asset(usluga.img!),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: Theme.of(context).backgroundColor,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.white12, width: 1),
+          borderRadius: BorderRadius.circular(10),
         ),
-        label: Text(usluga.usluga!),
+        avatar: CircleAvatar(
+          backgroundColor: Colors.white30,
+          child: Padding(
+            padding: EdgeInsets.all(2),
+            child: SvgPicture.asset(usluga.img!),
+          ),
+        ),
+        label: Text(usluga.usluga!, style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color
+          ),
+        ),
       ));
     });
 
-    return StaggeredGridView.countBuilder(
-      itemCount: list.length,
-      scrollDirection: Axis.vertical,
-      physics: NeverScrollableScrollPhysics(),
-
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return chips[index];
-      },
-      crossAxisCount: 2,
-      crossAxisSpacing: 8,
-      // mainAxisSpacing: 15,
-      staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-
+    return Wrap(
+      spacing: 5,
+      runSpacing: 5,
+      children: chips,
     );
   }
 

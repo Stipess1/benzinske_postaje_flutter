@@ -169,6 +169,7 @@ class LinearChartWidget extends StatelessWidget {
                 touchTooltipData: LineTouchTooltipData(
                     tooltipBgColor: Theme.of(context).cardColor,
                     fitInsideHorizontally: true,
+                    maxContentWidth: 180,
                     getTooltipItems: (touchedSpots) {
                       return touchedSpots.map((LineBarSpot touchedSpot) {
 

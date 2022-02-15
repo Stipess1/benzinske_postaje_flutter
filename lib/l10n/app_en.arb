@@ -1,0 +1,22 @@
+{
+  "gasNearByCount": "Gas Stations nearby",
+  "home": "Home",
+  "map": "Map",
+  "settings": "Settings",
+
+  "workingHours": "Working Hours",
+  "open": "Open",
+  "closed": "Closed",
+  "gasPrices": "Gas Prices",
+  "services": "Services",
+  "noServices": "No Services",
+  "priceChart": "Price Chart",
+  "3mo": "3mo.",
+  "6mo": "6mo.",
+  "1yr": "1yr.",
+  "all": "All",
+  "typeOfFuel": "Type of Fuel",
+  "chooseRadius": "Choose Radius",
+  "sort": "Sort",
+  "gasPricesWrong": "Gas Prices not showing correctly?"
+}

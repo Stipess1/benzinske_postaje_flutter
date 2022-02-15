@@ -1,8 +1,9 @@
 import 'package:benzinske_postaje/screens/home/view/navbar.dart';
 import 'package:benzinske_postaje/util/theme_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,16 @@ class MyApp extends StatelessWidget {
         builder: (context, _) {
           final themeProvider = Provider.of<ThemeNotifier>(context);
           return MaterialApp(
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('hr', ''),
+              Locale('en', '')
+            ],
             debugShowCheckedModeBanner: false,
             title: "Benzinske postaje",
             home: NavBar(),

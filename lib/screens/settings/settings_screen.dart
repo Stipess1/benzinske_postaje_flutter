@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,9 +17,13 @@ class SettingsScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _SettingsScreenState();
 
   ThemeNotifier? themeNotifier;
+
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
+  PackageInfo? packageInfo;
+  String? version = "NaN";
 
   var list = [
     false,
@@ -31,6 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     box = GetStorage();
     var themeMode = box.read('themeMode');
+    appInfo();
 
     if(themeMode == "dark") {
       list[0] = true;
@@ -38,6 +44,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       list[1] = true;
     }
     super.initState();
+  }
+
+  Future<void> appInfo() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo!.version;
+    setState(() {
+
+    });
   }
 
   @override
@@ -63,7 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                       ),
-                      subtitle: Text("1.9", style: TextStyle(
+                      subtitle: Text(version!, style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText2!.color
                         )
                       ),

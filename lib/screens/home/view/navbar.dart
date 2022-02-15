@@ -11,6 +11,7 @@ import 'package:benzinske_postaje/util/hex_color.dart';
 import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:benzinske_postaje/util/theme_manager.dart';
 import 'package:flash/flash.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -127,7 +128,7 @@ class _NavBarState extends State<NavBar> implements IFab, IHome{
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: _buildNavBar(),
+      bottomNavigationBar: _buildNavBar(context),
       floatingActionButton: rightCornerRadius!=0 ? SizedBox.shrink(): FloatingActionButton(onPressed: () {  },
         // label: Fab(),
         child: Fab(this, fuel, styles, radius, filtriraj),
@@ -151,12 +152,12 @@ class _NavBarState extends State<NavBar> implements IFab, IHome{
     );
   }
 
-  Widget _buildNavBar() {
+  Widget _buildNavBar(BuildContext context) {
 
     var labels = <String>[
-      "Početna",
-      "Karte",
-      "Postavke"
+      AppLocalizations.of(context)!.home,
+      AppLocalizations.of(context)!.map,
+      AppLocalizations.of(context)!.settings
     ];
 
     return AnimatedBottomNavigationBar.builder(

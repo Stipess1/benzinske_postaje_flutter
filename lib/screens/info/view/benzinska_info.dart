@@ -16,6 +16,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BenzinskaInfo extends StatefulWidget {
 
@@ -68,7 +69,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                     buildImage(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Radno Vrijeme: " + widget.postaja.trenutnoRadnoVrijeme!, textAlign: TextAlign.center,),
+                      child: Text(AppLocalizations.of(context)!.workingHours + widget.postaja.trenutnoRadnoVrijeme!, textAlign: TextAlign.center,),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -110,7 +111,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                       onPressed: () {
                         openMap(widget.postaja.lon!, widget.postaja.lat!);
                       },
-                      child: Text("Odvedi me"),
+                      child: Text(AppLocalizations.of(context)!.takeMe),
                     ),
                     Divider(
                       height: 1,
@@ -121,7 +122,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("Cijene Goriva", style: TextStyle(
+                          child: Text(AppLocalizations.of(context)!.gasPrices, style: TextStyle(
                               fontSize: 22
                           ), textAlign: TextAlign.start,),
                         )
@@ -145,7 +146,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Usluge", style: TextStyle(
+                            child: Text(AppLocalizations.of(context)!.services, style: TextStyle(
                                 fontSize: 22
                             ), textAlign: TextAlign.start,),
                           )
@@ -164,7 +165,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Grafikon Cijena", style: TextStyle(
+                            child: Text(AppLocalizations.of(context)!.priceChart, style: TextStyle(
                                 fontSize: 22
                             ), textAlign: TextAlign.start,),
                           )
@@ -176,10 +177,10 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
                         color: Theme.of(context).textTheme.bodyText1!.color,
                         selectedColor: Theme.of(context).textTheme.bodyText2!.color,
                         children: [
-                          Text("3mj."),
-                          Text("6mj."),
-                          Text("1god."),
-                          Text("sve")
+                          Text(AppLocalizations.of(context)!.threeMon),
+                          Text(AppLocalizations.of(context)!.sixMon),
+                          Text(AppLocalizations.of(context)!.oneYear),
+                          Text(AppLocalizations.of(context)!.all)
                         ],
                         onPressed: (int index) {
                           // isSelected[index] = !isSelected[index];
@@ -399,7 +400,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
   Widget buildStatus() {
 
-    String status = widget.postaja.otvoreno! ? "Otvoreno" : "Zatvoreno";
+    String status = widget.postaja.otvoreno! ? AppLocalizations.of(context)!.open : AppLocalizations.of(context)!.closed;
     Color text = widget.postaja.otvoreno! ? Color(0xFF29C467) : HexColor.fromHex("c42929");
     Color border = widget.postaja.otvoreno! ? Color(0x2F2dd36f) : Color(0x2Fd32d35);
 
@@ -429,7 +430,7 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
     if(list.length == 0) {
       return Padding(
         padding: const EdgeInsets.only(left: 15.0, bottom: 5.0),
-        child: Text("Nema usluga"),
+        child: Text(AppLocalizations.of(context)!.noServices),
       );
     }
 

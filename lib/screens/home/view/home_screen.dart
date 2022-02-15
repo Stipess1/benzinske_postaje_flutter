@@ -19,6 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'IHome.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           Padding(
             padding: EdgeInsets.all(8),
             child: Text(
-              "Benzinske u blizini (" +
+              AppLocalizations.of(context)!.gasNearByCount+" (" +
                   listaSize.toString() +
                   ")",
               textAlign: TextAlign.center,
@@ -110,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             )
             ,
             Padding(padding: EdgeInsets.all(15),
-            child: Text("Ne postoje benzinske s postavljenim filterima."),)
+            child: Text(AppLocalizations.of(context)!.gasStationExist),)
           ],
         ),
       );
@@ -163,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         backgroundColor: Theme.of(context).backgroundColor,
         contentTextStyle: Theme.of(context).textTheme.bodyText1,
         titleTextStyle: Theme.of(context).textTheme.headline5,
-        title: Text("Cijene na postajama"),
+        title: Text(AppLocalizations.of(context)!.gasPrices),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -173,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
             Padding(
               padding: EdgeInsets.only(top: 15),
-              child: Text('Neke cijene goriva mogu biti netočne, jer se svi podatci o benzinskim postajama uzima s Minstarstva gospodarstva i održivog razvoja Republike Hrvatske.')
+              child: Text(AppLocalizations.of(context)!.gasPricesDescription)
             )
           ],
         ),

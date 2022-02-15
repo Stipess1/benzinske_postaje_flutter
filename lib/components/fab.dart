@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Fab extends StatelessWidget {
 
@@ -62,7 +63,7 @@ class Fab extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: Text('Vrsta goriva', style: Theme.of(context).textTheme.bodyText2),
+                title: Text(AppLocalizations.of(context)!.typeOfFuel, style: Theme.of(context).textTheme.bodyText2),
                 leading: Icon(Ionicons.color_fill_outline, color: Theme.of(context).iconTheme.color,),
                 trailing: Text(this.fuel!, style: Theme.of(context).textTheme.bodyText2),
                 onTap: () => showCupertinoModalBottomSheet(
@@ -74,7 +75,7 @@ class Fab extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text('Izaberite radijus', style: Theme.of(context).textTheme.bodyText2),
+                title: Text(AppLocalizations.of(context)!.chooseRadius, style: Theme.of(context).textTheme.bodyText2),
                 trailing: Text(this.radius!, style: Theme.of(context).textTheme.bodyText2),
                 leading: Icon(Ionicons.compass_outline, color: Theme.of(context).iconTheme.color),
                 onTap: () => showCupertinoModalBottomSheet(
@@ -86,7 +87,7 @@ class Fab extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text('Sortiraj', style: Theme.of(context).textTheme.bodyText2),
+                title: Text(AppLocalizations.of(context)!.sort, style: Theme.of(context).textTheme.bodyText2),
                 leading: Icon(Ionicons.funnel_outline, color: Theme.of(context).iconTheme.color),
                 trailing: Text(this.filtriraj!, style: Theme.of(context).textTheme.bodyText2),
                 onTap: () => showCupertinoModalBottomSheet(
@@ -98,7 +99,7 @@ class Fab extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text('Cijene se ne prikazuju točno?', style: Theme.of(context).textTheme.bodyText2),
+                title: Text(AppLocalizations.of(context)!.gasPricesWrong, style: Theme.of(context).textTheme.bodyText2),
                 leading: Icon(Ionicons.alert_circle_outline, color: Theme.of(context).iconTheme.color),
                 onTap: () => iFab!.fuelPriceWrong(),
               ),
@@ -256,23 +257,23 @@ class Fab extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: Text("Niža cijena", style: Theme.of(context).textTheme.bodyText2),
+              title: Text(AppLocalizations.of(context)!.sortLowPrice, style: Theme.of(context).textTheme.bodyText2),
               onTap: () {
-                iFab!.sortFuel("Niža cijena", 0, 1);
+                iFab!.sortFuel(AppLocalizations.of(context)!.sortLowPrice, 0, 1);
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
             ListTile(
-              title: Text("Viša cijena", style: Theme.of(context).textTheme.bodyText2),
+              title: Text(AppLocalizations.of(context)!.sortHighPrice, style: Theme.of(context).textTheme.bodyText2),
               onTap: () {
-                iFab!.sortFuel("Viša cijena", 1, 0);
+                iFab!.sortFuel(AppLocalizations.of(context)!.sortHighPrice, 1, 0);
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
             ListTile(
-              title: Text("Po udaljenosti", style: Theme.of(context).textTheme.bodyText2),
+              title: Text(AppLocalizations.of(context)!.sortDistance, style: Theme.of(context).textTheme.bodyText2),
               onTap: () {
-                iFab!.sortFuel("Po udaljenosti", 2, -1);
+                iFab!.sortFuel(AppLocalizations.of(context)!.sortDistance, 2, -1);
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),

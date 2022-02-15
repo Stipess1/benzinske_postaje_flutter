@@ -9,6 +9,7 @@ import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -52,13 +53,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget> [
-                    Text("U vezi", style: TextStyle(
+                    Text(AppLocalizations.of(context)!.about, style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold
                       ),
                     ),
                     ListTile(
-                      title: Text("Verzija", style: TextStyle(
+                      title: Text(AppLocalizations.of(context)!.version, style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                       ),
@@ -78,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     ListTile(
-                      title: Text("Tema", style: TextStyle(
+                      title: Text(AppLocalizations.of(context)!.theme, style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                       ),
@@ -98,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         alignment: PlaceholderAlignment.middle
                                     ),
                                     TextSpan(
-                                        text: " Tamni način",
+                                        text: " " + AppLocalizations.of(context)!.darkTheme,
                                         style: TextStyle(
                                             color: Theme.of(context).textTheme.bodyText2!.color
                                         )
@@ -117,7 +118,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         alignment: PlaceholderAlignment.middle
                                     ),
                                     TextSpan(
-                                        text: " Svijetli način",
+                                        text: " " + AppLocalizations.of(context)!.lightTheme,
                                         style: TextStyle(
                                             color: Theme.of(context).textTheme.bodyText2!.color
                                         )
@@ -146,7 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     ListTile(
                       onTap: () => launch("https://mzoe-gor.hr/"),
-                      title: Text("Podatci o postajama", style: TextStyle(
+                      title: Text(AppLocalizations.of(context)!.gasPricesTaken, style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                       ),

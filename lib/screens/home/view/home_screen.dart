@@ -5,7 +5,6 @@ import 'package:benzinske_postaje/model/gorivo.dart';
 import 'package:benzinske_postaje/model/postaja.dart';
 import 'package:benzinske_postaje/screens/home/controller/igas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/controller/gas_stations_controller.dart';
-import 'package:benzinske_postaje/screens/home/view/navbar.dart';
 import 'package:benzinske_postaje/util/util.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +15,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'IHome.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     widget.state = this;
-    checkForInfoAlert();
     _mainWidget = Center(
       key: Key("1"),
       child: Column(
@@ -310,6 +307,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     setState(() {
       _mainWidget = buildListWidget();
     });
+    checkForInfoAlert();
   }
 
   @override

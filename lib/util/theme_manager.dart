@@ -61,13 +61,14 @@ class ThemeNotifier with ChangeNotifier {
     bool isDarkMode = systemTheme == Brightness.dark;
     if(themeMode == null && !isDarkMode){
       themeMode = "light";
-      box.write('themeMode', 'light');
     }
 
     if(themeMode == "light") {
       this.themeMode = ThemeMode.light;
+      box.write('themeMode', 'light');
     } else {
       this.themeMode = ThemeMode.dark;
+      box.write('themeMode', 'dark');
     }
     notifyListeners();
   }

@@ -3,6 +3,8 @@
 [<img src="assets/screenshots/banner.png" style="max-width: 100%;">](assets/screenshots/banner.png)
 Jednostavna aplikacija napravljena u Flutter-u za prikazivanje benzinskih postaji u Republici Hrvatskoj.
 
+<img src="https://img.shields.io/github/v/release/Stipess1/benzinske_postaje_flutter">
+
 ## Slike zaslona
 
 [<img src="assets/screenshots/image1.jpeg" width="160" style="max-width: 100%;">](assets/screenshots/image1.jpeg)

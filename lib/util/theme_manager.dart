@@ -1,5 +1,4 @@
 import 'package:benzinske_postaje/util/hex_color.dart';
-import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';

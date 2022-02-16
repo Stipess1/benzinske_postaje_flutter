@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:benzinske_postaje/components/benzinska_item.dart';
 import 'package:benzinske_postaje/model/gorivo.dart';

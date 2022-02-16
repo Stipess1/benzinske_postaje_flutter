@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:typed_data';
 
-import 'package:benzinske_postaje/components/benzinska_item.dart';
 import 'package:benzinske_postaje/model/gorivo.dart';
 import 'package:benzinske_postaje/model/postaja.dart';
 import 'package:benzinske_postaje/screens/home/controller/gas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/controller/igas_stations_controller.dart';
 import 'package:benzinske_postaje/screens/home/view/IHome.dart';
 import 'package:benzinske_postaje/screens/info/view/benzinska_info.dart';
-import 'package:benzinske_postaje/util/storage_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,8 +14,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'dart:ui' as ui;
 
 import '../../util/util.dart';
 
@@ -150,13 +145,6 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-  }
 
   @override
   void onFailureFetch(String message) {

@@ -85,6 +85,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     });
   }
 
+  void setLoading() {
+    setState(() {
+      _mainWidget = Center(
+        key: Key("1"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircularProgressIndicator()
+          ],
+        ),
+      );
+    });
+  }
+
   void gpsNotEnabled() {
     setState(() {
       _mainWidget = Center(

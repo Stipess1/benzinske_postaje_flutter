@@ -29,7 +29,7 @@ class NavBar extends StatefulWidget {
   _NavBarState createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
+class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements IFab, IHome, INav{
 
   late HomeScreen homeScreen;
   MapScreen mapScreen = MapScreen();
@@ -79,6 +79,7 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
     notchSmoothness = NotchSmoothness.smoothEdge;
     gapLocation = GapLocation.end;
     floatingActionButtonLocation = FloatingActionButtonLocation.endDocked;
+    WidgetsBinding.instance!.addObserver(this);
     homeScreen = HomeScreen(this);
     pages = [
       homeScreen,
@@ -95,8 +96,8 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
   }
 
   Future<void> checkPermission() async {
-    // print(await Permission.location.serviceStatus.isEnabled); da li je gps upaljen
-    if (!await Permission.location.request().isGranted) {
+    var status = await Permission.location.status;
+    if (!status.isGranted) {
       var status = await Permission.location.request();
       if(status == PermissionStatus.granted) {
         position = await Geolocator.getCurrentPosition();
@@ -110,6 +111,20 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
         fetchGasStations();
       } else {
         gpsNotEnabled();
+      }
+    }
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final granted = await Permission.location.isGranted;
+      if(granted) {
+        homeScreen.state.setLoading();
+        position = await Geolocator.getCurrentPosition();
+        fetchGasStations();
+      } else {
+        permissionNotGranted();
       }
     }
   }
@@ -131,6 +146,7 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
   @override
   void dispose() {
     _pageController!.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -272,7 +288,13 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
   }
 
   @override
-  void requestPermission() {
-    checkPermission();
+  Future<void> requestPermission() async {
+    var status = await Permission.location.request();
+    if(status == PermissionStatus.granted) {
+      position = await Geolocator.getCurrentPosition();
+      fetchGasStations();
+    } else {
+      openAppSettings();
+    }
   }
 }

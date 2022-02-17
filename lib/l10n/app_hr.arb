@@ -31,5 +31,8 @@
   "sortLowPrice": "Niža cijena",
   "sortHighPrice": "Veća cijena",
   "sortDistance": "Po udaljenosti",
-  "gasPricesWrong": "Cijene se ne prikazuju točno?"
+  "gasPricesWrong": "Cijene se ne prikazuju točno?",
+
+  "permissionDenied": "Aplikacija treba pristup vašoj lokaciji.",
+  "permissionGive": "Dozvoli"
 }

@@ -1,0 +1,3 @@
+class INav {
+  void requestPermission() {}
+}

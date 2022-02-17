@@ -31,5 +31,8 @@
   "sortLowPrice": "Low price",
   "sortHighPrice": "High price",
   "sortDistance": "Distance",
-  "gasPricesWrong": "Gas Prices not showing correctly?"
+  "gasPricesWrong": "Gas Prices not showing correctly?",
+
+  "permissionDenied": "Please, give permission to the application in order to work properly.",
+  "permissionGive": "Give Access"
 }

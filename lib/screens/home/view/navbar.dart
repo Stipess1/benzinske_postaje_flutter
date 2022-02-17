@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:animations/animations.dart';
 import 'package:benzinske_postaje/components/fab.dart';
 import 'package:benzinske_postaje/components/ifab.dart';
+import 'package:benzinske_postaje/components/inav.dart';
 import 'package:benzinske_postaje/model/gorivo.dart';
 import 'package:benzinske_postaje/model/postaja.dart';
 import 'package:benzinske_postaje/screens/home/view/IHome.dart';
@@ -28,9 +29,9 @@ class NavBar extends StatefulWidget {
   _NavBarState createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar> implements IFab, IHome{
+class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
 
-  HomeScreen homeScreen = HomeScreen();
+  late HomeScreen homeScreen;
   MapScreen mapScreen = MapScreen();
   SettingsScreen settingsScreen = SettingsScreen();
 
@@ -78,7 +79,7 @@ class _NavBarState extends State<NavBar> implements IFab, IHome{
     notchSmoothness = NotchSmoothness.smoothEdge;
     gapLocation = GapLocation.end;
     floatingActionButtonLocation = FloatingActionButtonLocation.endDocked;
-
+    homeScreen = HomeScreen(this);
     pages = [
       homeScreen,
       mapScreen,
@@ -94,13 +95,16 @@ class _NavBarState extends State<NavBar> implements IFab, IHome{
   }
 
   Future<void> checkPermission() async {
+    if (await Permission.location.isPermanentlyDenied) {
+      openAppSettings();
+    }
     if (!await Permission.location.request().isGranted) {
       var status = await Permission.location.request();
       if(status == PermissionStatus.granted) {
         position = await Geolocator.getCurrentPosition();
         fetchGasStations();
       } else {
-        print("Nije dopusteno");
+        permissionNotGranted();
       }
     } else {
       position = await Geolocator.getCurrentPosition();
@@ -112,6 +116,10 @@ class _NavBarState extends State<NavBar> implements IFab, IHome{
     IGasStationsController gasStationsController =
     new GasStationsController(this);
     gasStationsController.fetchGasStations();
+  }
+
+  void permissionNotGranted() {
+    homeScreen.state.permissionNotGranted();
   }
 
   @override
@@ -255,5 +263,10 @@ class _NavBarState extends State<NavBar> implements IFab, IHome{
   void onSuccessFetch(List<Postaja> list, List<Gorivo> goriva) {
     mapScreen.state.fetchGasStations();
     homeScreen.state.fetchGasStations();
+  }
+
+  @override
+  void requestPermission() {
+    checkPermission();
   }
 }

@@ -87,7 +87,7 @@ class BenzinskaItem extends StatelessWidget {
                       return FadeTransition(opacity: animation, child: child,);
                     },
                     pageBuilder: (context, animation, secondaryAnimation) {
-                      return BenzinskaInfo(postaja: postaja, goriva: this.goriva);
+                      return BenzinskaInfo(postaja: postaja, goriva: this.goriva, isMapSelected: false);
                     },
                   )
                 );

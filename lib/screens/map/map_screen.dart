@@ -176,7 +176,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
                   return Material(
                     borderRadius: BorderRadius.only(topLeft: Radius.elliptical(16, 16), topRight: Radius.elliptical(16, 16)),
                     color: Theme.of(context).scaffoldBackgroundColor,
-                    child: BenzinskaInfo(goriva: goriva, postaja: postaja),
+                    child: BenzinskaInfo(goriva: goriva, postaja: postaja, isMapSelected: true),
                   );
                 }
             );

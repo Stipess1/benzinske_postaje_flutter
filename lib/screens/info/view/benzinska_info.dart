@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,8 +23,9 @@ class BenzinskaInfo extends StatefulWidget {
 
   Postaja postaja;
   List<Gorivo> goriva;
+  bool isMapSelected;
 
-  BenzinskaInfo({Key? key, required this.postaja, required this.goriva}): super(key: key);
+  BenzinskaInfo({Key? key, required this.postaja, required this.goriva, required this.isMapSelected}): super(key: key);
 
   State<StatefulWidget> createState() => _BenzinskaInfoScreenState();
 
@@ -48,176 +50,223 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        iconTheme: Theme.of(context).iconTheme,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Text(widget.postaja.naziv!, style: Theme.of(context).primaryTextTheme.headline6),
-        systemOverlayStyle: Theme.of(context).appBarTheme.systemOverlayStyle!.copyWith(
-          statusBarColor: Theme.of(context).scaffoldBackgroundColor
-          )
-        ),
-      body: Container(
-        child: SafeArea(
-          child: Center(
-            child: ListView(
-              children: [Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    buildImage(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(AppLocalizations.of(context)!.workingHours + widget.postaja.trenutnoRadnoVrijeme!, textAlign: TextAlign.center,),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: buildStatus(),
-                    ),
-                    Text(widget.postaja.obveznik!, textAlign: TextAlign.center,),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(widget.postaja.naziv!, textAlign: TextAlign.center),
-                    ),
-                    Center(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(Icons.place_outlined),
-                          ),
-                          Text(widget.postaja.adresa!)
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(Icons.near_me_outlined),
-                          ),
-                          Text(widget.postaja.udaljenost.toString() + " km")
-                        ],
-                      ),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {
-                        openMap(widget.postaja.lon!, widget.postaja.lat!);
-                      },
-                      child: Text(AppLocalizations.of(context)!.takeMe),
-                    ),
-                    Divider(
-                      height: 1,
-                      color: Theme.of(context).dividerColor,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(AppLocalizations.of(context)!.gasPrices, style: TextStyle(
-                              fontSize: 22
-                          ), textAlign: TextAlign.start,),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      buildFuelPrices(context),
-                      Divider(
-                        height: 1,
-                        color: Theme.of(context).dividerColor,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(AppLocalizations.of(context)!.services, style: TextStyle(
-                                fontSize: 22
-                            ), textAlign: TextAlign.start,),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: buildOptions(context),
-                      ),
-                      Divider(
-                        height: 1,
-                        color: Theme.of(context).dividerColor,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(AppLocalizations.of(context)!.priceChart, style: TextStyle(
-                                fontSize: 22
-                            ), textAlign: TextAlign.start,),
-                          )
-                        ],
-                      ),
-                      ToggleButtons(
-                        isSelected: isSelected,
-                        borderRadius: BorderRadius.circular(15),
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        selectedColor: Theme.of(context).textTheme.bodyText2!.color,
-                        children: [
-                          Text(AppLocalizations.of(context)!.threeMon),
-                          Text(AppLocalizations.of(context)!.sixMon),
-                          Text(AppLocalizations.of(context)!.oneYear),
-                          Text(AppLocalizations.of(context)!.all)
-                        ],
-                        onPressed: (int index) {
-                          // isSelected[index] = !isSelected[index];
-
-                          if(index == 0) {
-                            filterCijenik(90);
-                          } else if(index == 1) {
-                            filterCijenik(180);
-                          } else if(index == 2) {
-                            filterCijenik(354);
-                          } else {
-                            filterCijenik(-1);
-                          }
-                          setState(() {
-                            for (int i = 0; i < isSelected.length; i++) {
-                              isSelected[i] = i == index;
-                            }
-                          });
-                        },
-                      ),
-                      if(filtriraniCijenik.length > 0)
-                        LinearChartWidget(filtriraniCijenik, widget.goriva)
-                    ],
-                  ),
-                ),
-
-              ],
-            ),
+    if(!widget.isMapSelected) {
+      return Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: true,
+              iconTheme: Theme.of(context).iconTheme,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              title: Text(widget.postaja.naziv!, style: Theme.of(context).primaryTextTheme.headline6),
+              systemOverlayStyle: Theme.of(context).appBarTheme.systemOverlayStyle!.copyWith(
+                  statusBarColor: Theme.of(context).scaffoldBackgroundColor
+              )
           ),
-        )
-    )
-    );
+          body: buildInfoContainer(context)
+      );
+    } else {
+      return Scaffold(
+        body: buildInfoContainer(context),
+      );
+    }
   }
 
   Future<void> openMap(double latitude, double longitude) async {
     var googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
     await launch(googleUrl.toString());
+  }
+
+  Widget buildInfoContainer(BuildContext context) {
+    return Container(
+        child: SafeArea(
+          child: Column(
+            children: [
+              if(widget.isMapSelected)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 15, left: 35),
+                      child: Text(widget.postaja.naziv!,
+                          style: Theme.of(context).primaryTextTheme.headline6,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15, top: 15),
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          icon: Icon(Ionicons.close_outline, size: 20)
+                      ),
+                    ),
+                  )
+                ],
+              ),
+                Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          buildImage(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(AppLocalizations.of(context)!.workingHours + widget.postaja.trenutnoRadnoVrijeme!, textAlign: TextAlign.center,),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: buildStatus(),
+                          ),
+                          Text(widget.postaja.obveznik!, textAlign: TextAlign.center,),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(widget.postaja.naziv!, textAlign: TextAlign.center),
+                          ),
+                          Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(Icons.place_outlined),
+                                ),
+                                Text(widget.postaja.adresa!)
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(Icons.near_me_outlined),
+                                ),
+                                Text(widget.postaja.udaljenost.toString() + " km")
+                              ],
+                            ),
+                          ),
+                          OutlinedButton(
+                            onPressed: () {
+                              openMap(widget.postaja.lon!, widget.postaja.lat!);
+                            },
+                            child: Text(AppLocalizations.of(context)!.takeMe),
+                          ),
+                          Divider(
+                            height: 1,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(AppLocalizations.of(context)!.gasPrices, style: TextStyle(
+                                    fontSize: 22
+                                ), textAlign: TextAlign.start,),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildFuelPrices(context),
+                            Divider(
+                              height: 1,
+                              color: Theme.of(context).dividerColor,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(AppLocalizations.of(context)!.services, style: TextStyle(
+                                      fontSize: 22
+                                  ), textAlign: TextAlign.start,),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: buildOptions(context),
+                            ),
+                            Divider(
+                              height: 1,
+                              color: Theme.of(context).dividerColor,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(AppLocalizations.of(context)!.priceChart, style: TextStyle(
+                                      fontSize: 22
+                                  ), textAlign: TextAlign.start,),
+                                )
+                              ],
+                            ),
+                            ToggleButtons(
+                              isSelected: isSelected,
+                              borderRadius: BorderRadius.circular(15),
+                              color: Theme.of(context).textTheme.bodyText1!.color,
+                              selectedColor: Theme.of(context).textTheme.bodyText2!.color,
+                              children: [
+                                Text(AppLocalizations.of(context)!.threeMon),
+                                Text(AppLocalizations.of(context)!.sixMon),
+                                Text(AppLocalizations.of(context)!.oneYear),
+                                Text(AppLocalizations.of(context)!.all)
+                              ],
+                              onPressed: (int index) {
+                                // isSelected[index] = !isSelected[index];
+
+                                if(index == 0) {
+                                  filterCijenik(90);
+                                } else if(index == 1) {
+                                  filterCijenik(180);
+                                } else if(index == 2) {
+                                  filterCijenik(354);
+                                } else {
+                                  filterCijenik(-1);
+                                }
+                                setState(() {
+                                  for (int i = 0; i < isSelected.length; i++) {
+                                    isSelected[i] = i == index;
+                                  }
+                                });
+                              },
+                            ),
+                            if(filtriraniCijenik.length > 0)
+                              LinearChartWidget(filtriraniCijenik, widget.goriva)
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+
+            ],
+          ),
+        )
+    );
   }
 
   /*

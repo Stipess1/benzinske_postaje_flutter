@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void permissionNotGranted() {
     setState(() {
       _mainWidget = Center(
-        key: Key("1"),
+        key: Key("5"),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void setLoading() {
     setState(() {
       _mainWidget = Center(
-        key: Key("1"),
+        key: Key("4"),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

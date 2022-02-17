@@ -44,6 +44,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
   String fuel = "Eurodizel";
   String radius = "5 km";
   String filtriraj = "";
+  bool granted = false;
 
   List<FontWeight> styles = [
     FontWeight.normal,
@@ -100,6 +101,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
     if (!status.isGranted) {
       var status = await Permission.location.request();
       if(status == PermissionStatus.granted) {
+        this.granted = true;
         position = await Geolocator.getCurrentPosition();
         fetchGasStations();
       } else {
@@ -107,6 +109,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
       }
     } else {
       if(await Permission.location.serviceStatus.isEnabled) {
+        this.granted = true;
         position = await Geolocator.getCurrentPosition();
         fetchGasStations();
       } else {
@@ -117,10 +120,11 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed && !this.granted) {
       final granted = await Permission.location.isGranted;
       if(granted) {
         homeScreen.state.setLoading();
+        this.granted = true;
         position = await Geolocator.getCurrentPosition();
         fetchGasStations();
       } else {

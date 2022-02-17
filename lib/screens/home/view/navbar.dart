@@ -95,9 +95,7 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
   }
 
   Future<void> checkPermission() async {
-    if (await Permission.location.isPermanentlyDenied) {
-      openAppSettings();
-    }
+    // print(await Permission.location.serviceStatus.isEnabled); da li je gps upaljen
     if (!await Permission.location.request().isGranted) {
       var status = await Permission.location.request();
       if(status == PermissionStatus.granted) {
@@ -107,8 +105,12 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
         permissionNotGranted();
       }
     } else {
-      position = await Geolocator.getCurrentPosition();
-      fetchGasStations();
+      if(await Permission.location.serviceStatus.isEnabled) {
+        position = await Geolocator.getCurrentPosition();
+        fetchGasStations();
+      } else {
+        gpsNotEnabled();
+      }
     }
   }
 
@@ -120,6 +122,10 @@ class _NavBarState extends State<NavBar> implements IFab, IHome, INav{
 
   void permissionNotGranted() {
     homeScreen.state.permissionNotGranted();
+  }
+
+  void gpsNotEnabled() {
+    homeScreen.state.gpsNotEnabled();
   }
 
   @override

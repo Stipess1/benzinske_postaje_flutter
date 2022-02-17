@@ -34,5 +34,7 @@
   "gasPricesWrong": "Gas Prices not showing correctly?",
 
   "permissionDenied": "Please, give permission to the application in order to work properly.",
-  "permissionGive": "Give Access"
+  "permissionGive": "Give Access",
+  "gpsNotEnabled": "Application needs Location turned on in order to work.",
+  "gpsRetry": "Retry"
 }

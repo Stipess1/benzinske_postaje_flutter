@@ -85,6 +85,51 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     });
   }
 
+  void gpsNotEnabled() {
+    setState(() {
+      _mainWidget = Center(
+        key: Key("1"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 256,
+              width: 256,
+              child: SvgPicture.asset('assets/images/gps.svg'),
+            )
+            ,
+            Padding(padding: EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Text(AppLocalizations.of(context)!.gpsNotEnabled, textAlign: TextAlign.center,),
+                  OutlinedButton(
+                    onPressed: () {
+                      widget.inav.requestPermission();
+                      setState(() {
+                        _mainWidget = Center(
+                          key: Key("1"),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator()
+                            ],
+                          ),
+                        );
+                      });
+                    },
+                    child: Text(AppLocalizations.of(context)!.gpsRetry),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
   @override
   void initState() {
     super.initState();

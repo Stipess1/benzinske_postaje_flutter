@@ -34,5 +34,7 @@
   "gasPricesWrong": "Cijene se ne prikazuju točno?",
 
   "permissionDenied": "Aplikacija treba pristup vašoj lokaciji.",
-  "permissionGive": "Dozvoli"
+  "permissionGive": "Dozvoli",
+  "gpsNotEnabled": "Aplikacija treba pristup vašoj lokaciji. Upalite lokaciju na vašem uređaju.",
+  "gpsRetry": "Pokušaj ponovno"
 }

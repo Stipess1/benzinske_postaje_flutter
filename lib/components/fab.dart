@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -109,6 +110,7 @@ class Fab extends StatelessWidget {
     }
 
   Widget buildFuelTypes(BuildContext context) {
+    final box = GetStorage();
     return Material(
       borderRadius: BorderRadius.only(topLeft: Radius.elliptical(16, 16), topRight: Radius.elliptical(16, 16)),
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -125,6 +127,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(7, "Eurodizel+", 0);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 7);
               },
             ),
             ListTile(
@@ -136,6 +139,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(8, "Eurodizel", 1);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 8);
               }
             ),
             ListTile(
@@ -146,6 +150,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(1, "Eurosuper 95+", 2);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 1);
               }
             ),
             ListTile(
@@ -156,6 +161,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(2, "Eurosuper 95", 3);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 2);
               }
             ),
             ListTile(
@@ -166,6 +172,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(5, "Eurosuper 100+", 4);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 5);
               }
             ),
             ListTile(
@@ -176,6 +183,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(6, "Eurosuper 100", 5);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 6);
               }
             ),
             ListTile(
@@ -186,6 +194,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(9, "UNP (autoplin)", 6);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 9);
               }
             ),
             ListTile(
@@ -196,6 +205,7 @@ class Fab extends StatelessWidget {
               onTap: () {
                 iFab!.setFuel(11, "Plavi dizel", 7);
                 Navigator.of(context).popUntil((route) => route.isFirst);
+                box.write('fuel', 11);
               }
             ),
           ],

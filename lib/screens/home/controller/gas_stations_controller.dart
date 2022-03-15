@@ -46,6 +46,10 @@ class GasStationsController implements IGasStationsController{
     final box = GetStorage();
     // box.erase();
     var time = box.read('time');
+    var fuel = box.read('fuel');
+    print("fuel je $fuel");
+    if(fuel == null)
+      fuel = 8;
     var diffDays = 1;
     if(time != null) {
       time = time.substring(1);
@@ -93,7 +97,6 @@ class GasStationsController implements IGasStationsController{
           postaja.mjesto = web['mjesto'].replaceAll("/\u00A0/", " ");
           postaja.obveznikId = web['obveznik_id'];
 
-          var postojiDizel8 = false;
           for(var j = 0; j < web['cjenici'].length; j++) {
             var cijenik = new Cijenik();
 
@@ -101,25 +104,18 @@ class GasStationsController implements IGasStationsController{
             cijenik.gorivoId = web['cjenici'][j]['gorivo_id'];
             cijenik.cijena = jsonToDouble(web['cjenici'][j]['cijena']);
             getNaziv(cijenik, body['gorivos']);
-            if(cijenik.vrstaGorivoId == 8) {
-              postojiDizel8 = true;
-              postaja.gorivo = cijenik.cijena!.toStringAsFixed(2);
-            }
             postaja.cijenici.add(cijenik);
-
           }
 
-          if(!postojiDizel8) {
-            for(var j = 0; j < postaja.cijenici.length; j++) {
-              if(postaja.cijenici[j].vrstaGorivoId == 7) {
-                postaja.gorivo = postaja.cijenici[j].cijena!.toStringAsFixed(2);
-                break;
-              }
+          for(var j = 0; j < postaja.cijenici.length; j++) {
+            if(postaja.cijenici[j].vrstaGorivoId == fuel) {
+              postaja.gorivo = postaja.cijenici[j].cijena!.toStringAsFixed(2);
+              break;
             }
-            // Ako ne postoji dizel na benzinskoj
-            if(postaja.gorivo!.isEmpty) {
-              postaja.gorivo = "---";
-            }
+          }
+          // Ako ne postoji dizel na benzinskoj
+          if(postaja.gorivo!.isEmpty) {
+            postaja.gorivo = "---";
           }
 
           for(var j = 0; j < web['opcije'].length; j++) {
@@ -216,7 +212,7 @@ class GasStationsController implements IGasStationsController{
         print(list.length);
         box.write("postaje", toJson);
         box.write("goriva", toJsonGorivo);
-        iHome.onSuccessFetch(list, goriva);
+        iHome.onSuccessFetch(list, goriva, true);
       } else {
         iHome.onFailureFetch("Greska kod servera");
       }
@@ -225,18 +221,18 @@ class GasStationsController implements IGasStationsController{
       var postaje = box.read('postaje');
       var goriva = box.read('goriva');
 
-
       List<Postaja> list = [];
       List<Gorivo> gorivoList = [];
       for(int i = 0; i < postaje.length; i++) {
          list.add(Postaja.fromJson(postaje[i]));
+         list[i].trenutnoRadnoVrijeme = parseTime("", list[i], list[i].radnaVremena!);
       }
 
       for(int i = 0; i < goriva.length; i++) {
         gorivoList.add(Gorivo.fromJson(goriva[i]));
       }
 
-      iHome.onSuccessFetch(list, gorivoList);
+      iHome.onSuccessFetch(list, gorivoList, false);
 
     }
 

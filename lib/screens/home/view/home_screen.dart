@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'IHome.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   late Widget _mainWidget;
   late BuildContext homeContext;
 
-
+  late var fuel;
 
   Future<void> fetchGasStations() async {
     position = await Geolocator.getCurrentPosition();
@@ -149,6 +150,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     widget.state = this;
+    final box = GetStorage();
+    fuel = box.read('fuel');
     _mainWidget = Center(
       key: Key("1"),
       child: Column(
@@ -383,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   @override
-  void onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva) {
+  void onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva, bool sorted) {
     for (var i = 0; i < postaje.length; i++) {
       var postaja = postaje[i];
       if (postaja.lat != null && postaja.lon != null) {
@@ -395,6 +398,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         if (postaja.udaljenost! <= 5.0) {
           listaSize++;
           filtriranePostaje.add(postaja);
+        }
+        if(!sorted) {
+          for(var j = 0; j < postaja.cijenici.length; j++) {
+            if(postaja.cijenici[j].vrstaGorivoId == fuel) {
+              postaja.gorivo = postaja.cijenici[j].cijena!.toStringAsFixed(2);
+              break;
+            }
+          }
+          if(postaja.gorivo!.isEmpty) {
+            postaja.gorivo = "---";
+          }
         }
       }
     }

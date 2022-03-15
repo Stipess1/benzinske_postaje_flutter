@@ -286,7 +286,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
   }
 
   @override
-  void onSuccessFetch(List<Postaja> list, List<Gorivo> goriva) {
+  void onSuccessFetch(List<Postaja> list, List<Gorivo> goriva, bool sorted) {
     mapScreen.state.fetchGasStations();
     homeScreen.state.fetchGasStations();
   }

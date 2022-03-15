@@ -1,4 +1,5 @@
 import 'package:benzinske_postaje/components/ifab.dart';
+import 'package:benzinske_postaje/util/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -14,6 +15,7 @@ class Fab extends StatelessWidget {
   String? radius;
   String? filtriraj;
   List<FontWeight>? styles;
+  GetStorage box = GetStorage();
 
   Fab(IFab iFab, String fuel, List<FontWeight> styles, String radius, String filtriraj) {
     this.iFab = iFab;
@@ -21,6 +23,10 @@ class Fab extends StatelessWidget {
     this.styles = styles;
     this.radius = radius;
     this.filtriraj = filtriraj;
+
+    if(box.read('fuel') != null) {
+      this.fuel = Util.getFuelFromId(box.read('fuel'));
+    }
   }
 
   @override
@@ -110,7 +116,6 @@ class Fab extends StatelessWidget {
     }
 
   Widget buildFuelTypes(BuildContext context) {
-    final box = GetStorage();
     return Material(
       borderRadius: BorderRadius.only(topLeft: Radius.elliptical(16, 16), topRight: Radius.elliptical(16, 16)),
       color: Theme.of(context).scaffoldBackgroundColor,

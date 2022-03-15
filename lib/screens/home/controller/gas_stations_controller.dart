@@ -277,7 +277,7 @@ class GasStationsController implements IGasStationsController{
     var pocetnoVrijeme = splitTime[0].substring(0, splitTime[0].length - 3); // 6
     var zavrsnoVrijeme = splitTime[1].substring(0, splitTime[1].length - 3); // 20
 
-    if(date.hour < int.parse(zavrsnoVrijeme) && date.hour > int.parse(pocetnoVrijeme)) {
+    if(date.hour < int.parse(zavrsnoVrijeme) && date.hour >= int.parse(pocetnoVrijeme)) {
       postaja.otvoreno = true;
     } else {
       if(zavrsnoVrijeme == "24" && pocetnoVrijeme == "00") {

@@ -1,4 +1,4 @@
-import 'package:benzinske_postaje/components/LinearChartWidget.dart';
+import 'package:benzinske_postaje/components/linear_chart.dart';
 import 'package:benzinske_postaje/model/cijenik.dart';
 import 'package:benzinske_postaje/model/gorivo.dart';
 import 'package:benzinske_postaje/model/postaja.dart';

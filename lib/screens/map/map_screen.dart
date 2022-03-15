@@ -152,7 +152,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
   }
 
   @override
-  Future<void> onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva) async {
+  Future<void> onSuccessFetch(List<Postaja> postaje, List<Gorivo> goriva, bool sorted) async {
     for (var i = 0; i < postaje.length; i++){
       var postaja = postaje[i];
       if (postaja.lat != null && postaja.lon != null) {

@@ -34,6 +34,13 @@ class GasStationsController implements IGasStationsController{
     return item;
   }
 
+  bool isNumeric(String? string) {
+    if (string == null) {
+      return false;
+    }
+    return double.tryParse(string) != null;
+  }
+
   @override
   Future<void> fetchGasStations() async {
 
@@ -44,7 +51,7 @@ class GasStationsController implements IGasStationsController{
     var format = f.format(to);
     var today = DateTime.parse(format);
     final box = GetStorage();
-    // box.erase();
+    box.erase();
     var time = box.read('time');
     var fuel = box.read('fuel');
     print("fuel je $fuel");
@@ -59,7 +66,7 @@ class GasStationsController implements IGasStationsController{
     }
     // diffDays = 2;
     if(diffDays >= 1 || time == null) {
-      box.write('time', jsonEncode(today, toEncodable: myEncode));
+
       print("API FETCH");
       var url = Uri.parse("https://benzinske-postaje.herokuapp.com");
       var response;
@@ -87,10 +94,10 @@ class GasStationsController implements IGasStationsController{
 
           postaja.adresa = web['adresa'].replaceAll('/\u00A0/', " ");
           postaja.id = web['id'];
-          if(web['lat'] != "15° 31.2440' E" && web['lat'] != "")
+          if(isNumeric(web['lat']))
             postaja.lat = double.parse(web['lat']);
 
-          if(web['long'] != "" && web['long'] != "45° 39.4112' N")
+          if(isNumeric(web['long']))
             postaja.lon = double.parse(web['long']);
 
           postaja.naziv = web['naziv'].replaceAll("/\u00A0/", " ");
@@ -162,7 +169,7 @@ class GasStationsController implements IGasStationsController{
           } else if(postaja.obveznik!.contains("Crodux")) {
             postaja.img = "assets/images/crodux.png";
           }
-
+          box.write('time', jsonEncode(today, toEncodable: myEncode));
           list.add(postaja);
           toJson.add(postaja.toJson());
         }

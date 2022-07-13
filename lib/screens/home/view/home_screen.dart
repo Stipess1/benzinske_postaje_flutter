@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircularProgressIndicator()
+            CircularProgressIndicator(strokeWidth: 2)
           ],
         ),
       );
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircularProgressIndicator()
+          CircularProgressIndicator(strokeWidth: 2)
         ],
       ),
     );
@@ -167,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   Widget buildListWidget() {
     if(filtriranePostaje.length > 0) {
       return ListView(
+        physics: BouncingScrollPhysics(),
         key: Key("2"),
         children: <Widget> [
           Padding(

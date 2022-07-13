@@ -39,9 +39,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     appInfo();
 
     if(themeMode == "dark") {
-      list[0] = true;
-    } else {
       list[1] = true;
+    } else {
+      list[0] = true;
     }
     super.initState();
   }

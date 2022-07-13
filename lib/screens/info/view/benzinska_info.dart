@@ -300,48 +300,42 @@ class _BenzinskaInfoScreenState extends State<BenzinskaInfo> implements IBenzins
     for(int i = 0; i < widget.postaja.cijenici.length; i++) {
       var gorivo = widget.postaja.cijenici[i];
 
-      prices.add(Column(
-        children: [
-          buildContainer(gorivo),
-          Text(gorivo.naziv!, textAlign: TextAlign.center, style: TextStyle(
-            fontWeight: FontWeight.w400
-          ),),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: RichText(text: TextSpan(
-              text: gorivo.cijena!.toStringAsFixed(2),
-              style: TextStyle(
-                fontFamily: "VarelaRound",
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.bodyText2!.color,
-                fontSize: 17
-              ),
-              children: [
-                TextSpan(text: " kn/L", style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal
-                ))
-              ]
-            )),
-          )
-        ],
+      prices.add(StaggeredGridTile.fit(
+        crossAxisCellCount: 1,
+        child: Column(
+          children: [
+            buildContainer(gorivo),
+            Text(gorivo.naziv!, textAlign: TextAlign.center, style: TextStyle(
+              fontWeight: FontWeight.w400
+            ),),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: RichText(text: TextSpan(
+                text: gorivo.cijena!.toStringAsFixed(2),
+                style: TextStyle(
+                  fontFamily: "VarelaRound",
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.bodyText2!.color,
+                  fontSize: 17
+                ),
+                children: [
+                  TextSpan(text: " kn/L", style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal
+                  ))
+                ]
+              )),
+            )
+          ],
+        ),
       ));
     }
 
-    return StaggeredGridView.countBuilder(
-      itemCount: widget.postaja.cijenici.length,
-      scrollDirection: Axis.vertical,
-      physics: NeverScrollableScrollPhysics(),
-
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return prices[index];
-      }, 
+    return StaggeredGrid.count(
       crossAxisCount: 3,
       crossAxisSpacing: 10,
       mainAxisSpacing: 15,
-      staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-      
+      children: prices,
     );
   }
 

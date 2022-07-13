@@ -45,7 +45,7 @@ class _MapScreenState extends State<MapScreen> with AutomaticKeepAliveClientMixi
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircularProgressIndicator()
+          CircularProgressIndicator(strokeWidth: 2)
         ],
       ),
     );

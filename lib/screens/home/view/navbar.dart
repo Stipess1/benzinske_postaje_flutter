@@ -80,7 +80,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
     notchSmoothness = NotchSmoothness.smoothEdge;
     gapLocation = GapLocation.end;
     floatingActionButtonLocation = FloatingActionButtonLocation.endDocked;
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     homeScreen = HomeScreen(this);
     pages = [
       homeScreen,
@@ -90,7 +90,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
 
     _pageController = PreloadPageController(initialPage: page);
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       checkPermission();
     });
     super.initState();
@@ -150,7 +150,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver implements 
   @override
   void dispose() {
     _pageController!.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

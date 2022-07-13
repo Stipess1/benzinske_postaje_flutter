@@ -69,99 +69,106 @@ class LinearChartWidget extends StatelessWidget {
                   spots: benzin95!.map((e) => FlSpot(
                       DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                   )).toList(),
-                  colors: [
+                  color:
                     HexColor.fromHex("8dd374")
-                  ]
+
               ),
               LineChartBarData(
                   spots: benzinPremium95!.map((e) => FlSpot(
                       DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                   )).toList(),
-                  colors: [
+                  color:
                     HexColor.fromHex("8dd374")
-                  ]
+
               ),
               LineChartBarData(
                 spots: benzinPremium100!.map((e) => FlSpot(
                     DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                 )).toList(),
-                colors: [
+                color:
                   HexColor.fromHex('67a84f')
-                ],
 
               ),
               LineChartBarData(
                   spots: benzin100!.map((e) => FlSpot(
                       DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                   )).toList(),
-                  colors: [
+                  color:
                     HexColor.fromHex('67a84f')
-                  ]
+
               ),
               LineChartBarData(
                   spots: euroDizelPremium!.map((e) => FlSpot(
                       DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                   )).toList(),
-                  colors: [
+                  color:
                     HexColor.fromHex("5c5c5c")
-                  ]
+
               ),
               LineChartBarData(
                 spots: euroDizel!.map((e) => FlSpot(
                     DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                 )).toList(),
-                colors: [
+                color:
                   HexColor.fromHex("0544D3")
-                ],
+
 
               ),
               LineChartBarData(
                   spots: lpg!.map((e) => FlSpot(
                       DateTime.parse(e.datPoc!).millisecondsSinceEpoch.toDouble(), e.cijena!
                   )).toList(),
-                  colors: [
+                  color:
                     HexColor.fromHex("fac02d")
-                  ]
               )
             ],
             titlesData: FlTitlesData(
                 show: true,
-                leftTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 35,
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 35,
+                  ),
+
                   // interval: 1
                 ),
-                topTitles: SideTitles(
-                    showTitles: false
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                      showTitles: false
+                  )
                 ),
-                rightTitles: SideTitles(
-                    showTitles: false
+                rightTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                        showTitles: false
+                    )
                 ),
-                bottomTitles: SideTitles(
-                  showTitles:  true,
-                  reservedSize: 60,
-                  rotateAngle: -45,
-                  getTextStyles: (context, value){
-                    return TextStyle(
-                        fontSize: 10
-                    );
-                  },
-                  getTitles: (value) {
-                    final DateTime date =
-                    DateTime.fromMillisecondsSinceEpoch(value.toInt());
-                    final parts = date.toIso8601String().split("T");
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles:  true,
+                    reservedSize: 60,
+                    getTitlesWidget: (double value, TitleMeta meta) {
+                      final DateTime date =
+                      DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                      final parts = date.toIso8601String().split("T");
 
-                    var dateFormat = DateFormat('yyyy-MM-dd');
-                    var input = dateFormat.parse(parts.first);
+                      var dateFormat = DateFormat('yyyy-MM-dd');
+                      var input = dateFormat.parse(parts.first);
 
-                    var output = DateFormat('dd/MM/yyyy');
-                    var outputFormat = output.format(input);
+                      var output = DateFormat('dd/MM/yyyy');
+                      var outputFormat = output.format(input);
 
-                    return outputFormat;
-                  },
 
-                  // margin: 12,
-                  // interval: 2
+
+                      return SideTitleWidget(
+                          child: Text(outputFormat, style: TextStyle(
+                              fontSize: 10
+                            )
+                          ),
+                          axisSide: AxisSide.bottom,
+                          angle: -45.0,
+                      );
+                    },
+                  )
                 )
             ),
             lineTouchData: LineTouchData(
@@ -205,7 +212,7 @@ class LinearChartWidget extends StatelessWidget {
                         var outputFormat = output.format(input);
 
                         final textStyle = TextStyle(
-                          color: touchedSpot.bar.colors[0],
+                          color: touchedSpot.bar.color,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         );
